@@ -66,7 +66,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 	DWORD style = (WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX);
 	AdjustWindowRectEx(&windowRect, style, FALSE, 0);
-	HWND hwnd = CreateWindowEx(0, wndclass.lpszClassName, "Adjusted Window", style, windowRect.left, windowRect.top, windowRect.right - windowRect.left, windowRect.bottom - windowRect.top, NULL, NULL, hInstance, szCmdLine);
+	HWND hwnd = CreateWindowEx(0, wndclass.lpszClassName, "Main Window", style, windowRect.left, windowRect.top, windowRect.right - windowRect.left, windowRect.bottom - windowRect.top, NULL, NULL, hInstance, szCmdLine);
 	HDC hdc = GetDC(hwnd);
 	
 	//create openGL context
@@ -83,6 +83,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	int pixelFormat = ChoosePixelFormat(hdc, &pfd);
 	SetPixelFormat(hdc, pixelFormat, &pfd);
 
+	//tempRC is needed only to get a pointer to wglCreateContextAttribsARB
 	HGLRC tempRC = wglCreateContext(hdc);
 	wglMakeCurrent(hdc, tempRC);
 	PFNWGLCREATECONTEXTATTRIBSARBPROC wglCreateContextAttribsARB = NULL;
@@ -102,8 +103,123 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	wglMakeCurrent(NULL, NULL);
 	wglDeleteContext(tempRC);
 	wglMakeCurrent(hdc, hglrc);
+
+	if (!gladLoadGL()) {
+		std::cout << "Could not initialize glad\n";
+	}
+	else {
+		std::cout << "OpenGL Version " << GLVersion.major << "." << GLVersion.minor << " loaded\n";
+	}
+
+	PFNWGLGETEXTENSIONSSTRINGEXTPROC _wglGetExtensionsStringEXT = (PFNWGLGETEXTENSIONSSTRINGEXTPROC)wglGetProcAddress("wglGetExtensionsStringEXT");
+	bool swapControlSupported = strstr(_wglGetExtensionsStringEXT(), "WGL_EXT_swap_control") != 0;
+
+	//if WGL_EXT_swap_control is available
+	int vsynch = 0;
+	if (swapControlSupported) {
+		PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT = (PFNWGLSWAPINTERVALEXTPROC)wglGetProcAddress("wglSwapIntervalEXT");
+		PFNWGLGETSWAPINTERVALEXTPROC wglGetSwapIntervalEXT = (PFNWGLGETSWAPINTERVALEXTPROC)wglGetProcAddress("wglGetSwapIntervalEXT");
+
+		if (wglSwapIntervalEXT(1)) {
+			std::cout << "Enabled vsynch\n";
+			vsynch = wglGetSwapIntervalEXT();
+		}
+		else {
+			std::cout << "Could not enable vsynch\n";
+		}
+	}
+	else { 
+		std::cout << "WGL_EXT_swap_control not supported\n";
+	}
+
+	glGenVertexArrays(1, &_vao);
+	glBindVertexArray(_vao);
+
+	ShowWindow(hwnd, SW_SHOW);
+	UpdateWindow(hwnd);
+	_app->Initialize();
+
+	DWORD lastTick = GetTickCount();
+	MSG msg;
+	while (true) {
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+			if (msg.message == WM_QUIT) {
+				break;
+			}
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+		DWORD thisTick = GetTickCount();
+		//convert from milisec to sec
+		float deltaTime = float(thisTick - lastTick) * 0.001f;
+		lastTick = thisTick;
+		if (_app != 0) {
+			_app->Update(deltaTime);
+		}
+
+		if (_app != 0) {
+			RECT clientRect;
+			GetClientRect(hwnd, &clientRect);
+			clientWidth = clientRect.right - clientRect.left;
+			clientHeight = clientRect.bottom - clientRect.top;
+
+			glViewport(0, 0, clientWidth, clientHeight);
+			glEnable(GL_DEPTH_TEST);
+			glEnable(GL_CULL_FACE);
+			glPointSize(5.0f);
+			glBindVertexArray(_vao);
+			glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+			float aspect = (float)clientWidth / (float)clientHeight;
+			_app->Render(aspect);
+		}
+
+		if (_app != 0) {
+			SwapBuffers(hdc);
+			//if vsynch is enabled, glFinish needs to be called
+			if (vsynch != 0) {
+				glFinish();
+			}
+		}
+	}
+
+	if (_app != 0) {
+		std::cout << "application needs to be null to exit\n";
+		delete _app;
+	}
+	return (int)msg.wParam;
 }
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam) {
+	switch (iMsg) {
+	case WM_CLOSE:
+		if (_app != 0) {
+			_app->Shutdown();
+			_app = 0;
+			DestroyWindow(hwnd);
+		}
+		else {
+			std::cout << "Already Shutdown\n";
+		}
+	case WM_DESTROY:
+		if (_vao != 0) {
+			HDC hdc = GetDC(hwnd);
+			HGLRC hglrc = wglGetCurrentContext();
 
+			wglMakeCurrent(NULL, NULL);
+			wglDeleteContext(hglrc);
+			ReleaseDC(hwnd, hdc);
+
+			PostQuitMessage(0);
+		}
+		else {
+			std::cout << "Got multiple destroy messages";
+		}
+		break;
+	case WM_PAINT:
+	case WM_ERASEBKGND:
+		return 0;
+	}
+	return DefWindowProc(hwnd, iMsg, wParam, lParam);
 }
