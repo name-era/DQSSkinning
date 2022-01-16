@@ -1,6 +1,5 @@
 #include "attribute.h"
 
-
 Attribute::Attribute() {
 	glGenBuffers(1, &_handle);
 	_count = 0;
@@ -18,7 +17,8 @@ uint32_t Attribute::GetHandle() {
 	return _handle;
 }
 
-uint32_t Attribute::Set(const void* data, uint32_t arrayLength) {
+//ÉTÉCÉYÇÕattributeÇÃ
+uint32_t Attribute::Set(const void* data, GLsizei arrayLength) {
 	_count = arrayLength;
 	uint32_t size = sizeof(data);
 
@@ -27,7 +27,7 @@ uint32_t Attribute::Set(const void* data, uint32_t arrayLength) {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void Attribute::BindAttribute(uint32_t slot, GLint size) {
+void Attribute::SetAttribute(uint32_t slot, GLint size) {
 	glBindBuffer(GL_ARRAY_BUFFER, _handle);
 	glEnableVertexAttribArray(slot);
 	glVertexAttribPointer(slot, size, GL_FLOAT, GL_FALSE, 0, (void*)0);

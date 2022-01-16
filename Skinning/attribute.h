@@ -43,12 +43,12 @@ public:
 	/**
 	* 頂点データを送る
 	*/
-	uint32_t Set(const void* data, uint32_t arrayLength);
+	uint32_t Set(const void* data, GLsizei arrayLength);
 
 	/**
 	* Attribute変数をセットする
 	*/
-	void BindAttribute(uint32_t slot, GLint size);
+	void SetAttribute(uint32_t slot, GLint size);
 
 	/**
 	* Attribute変数をセットする
