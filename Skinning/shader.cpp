@@ -32,9 +32,9 @@ std::vector<char> Shader::ReadFile(const std::string& filename) {
     return buffer;
 }
 
-uint32_t Shader::CompileVertexShader(const std::string& vertex) {
+uint32_t Shader::CompileVertexShader(const std::vector<char> vertex) {
     uint32_t v = glCreateShader(GL_VERTEX_SHADER);
-    const char* source = vertex.c_str();
+    const char* source = vertex.data();
     glShaderSource(v, 1, &source, NULL);
     glCompileShader(v);
 
@@ -52,9 +52,9 @@ uint32_t Shader::CompileVertexShader(const std::string& vertex) {
     return v;
 }
 
-uint32_t Shader::CompileFragmentShader(const std::string& fragment) {
+uint32_t Shader::CompileFragmentShader(const std::vector<char> fragment) {
     uint32_t f = glCreateShader(GL_FRAGMENT_SHADER);
-    const char* source = fragment.c_str();
+    const char* source = fragment.data();
     glShaderSource(f, 1, &source, NULL);
     glCompileShader(f);
 
@@ -123,7 +123,7 @@ void Shader::PopulateUniforms() {
     char testName[256];
 
     glUseProgram(_handle);
-    glGetProgramiv(_handle, GL_ACTIVE_ATTRIBUTES, &count);
+    glGetProgramiv(_handle, GL_ACTIVE_UNIFORMS, &count);
     for (GLuint i = 0; i < count; i++) {
         memset(name, 0, sizeof(char) * 128);
         glGetActiveUniform(_handle, i, 128, &length, &size, &type, name);
@@ -135,10 +135,12 @@ void Shader::PopulateUniforms() {
             std::size_t found = uniformName.find('[');
             //’l‚ªŒ©‚Â‚©‚Á‚½‚©
             if (found != std::string::npos) {
+                //[ˆÈ~‚ðíœ
                 uniformName.erase(uniformName.begin() + found, uniformName.end());
                 unsigned int uniformIndex = 0;
                 while (true) {
                     memset(testName, 0, sizeof(char) * 256);
+                    //testName=uniform•Ï”–¼+[index]
                     sprintf(testName, "%s[%d]", uniformName.c_str(), uniformIndex++);
                     int uniformLocation = glGetUniformLocation(_handle, testName);
                     if (uniformLocation < 0) {
@@ -147,9 +149,22 @@ void Shader::PopulateUniforms() {
                     _uniforms[testName] = uniformLocation;
                 }
             }
-            _attributes[name] = uniform;
+            _uniforms[name] = uniform;
         }
     }
 
     glUseProgram(0);
+}
+
+void Shader::Load(const std::string& vertex, const std::string& fragment) {
+
+    std::vector<char> vertexSource = ReadFile(vertex);
+    std::vector<char> fragmentSource = ReadFile(fragment);
+
+    uint32_t vertexShader = CompileVertexShader(vertexSource);
+    uint32_t fragmentShader = CompileFragmentShader(fragmentSource);
+    if (LinkShaders(vertexShader, fragmentShader)) {
+        PopulateAttributes();
+        PopulateUniforms();
+    }
 }

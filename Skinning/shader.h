@@ -3,6 +3,7 @@
 #include <map>
 #include <string>
 #include <fstream>
+#include <iostream>
 #include <vector>
 
 class Shader {
@@ -19,14 +20,43 @@ private:
 	Shader(const std::string& vertex, const std::string& fragment);
 	~Shader();
 
+	/**
+	* シェーダーファイルを読み込む
+	*/
 	std::vector<char> ReadFile(const std::string& filename);
-	uint32_t CompileVertexShader(const std::string& vertex);
-	uint32_t CompileFragmentShader(const std::string& fragment);
+	
+	/**
+	* 頂点シェーダーをコンパイルする
+	*/
+	uint32_t CompileVertexShader(const std::vector<char> vertex);
+	
+	/**
+	* シェーダーをコンパイルする
+	*/
+	uint32_t CompileFragmentShader(const std::vector<char> fragment);
+	
+	/**
+	* シェーダーをリンクする
+	*/
 	bool LinkShaders(uint32_t vertex, uint32_t fragment);
+	
+	/**
+	* Attribute変数を取得する
+	*/
 	void PopulateAttributes();
+
+	/**
+	* Uniform変数を取得する
+	*/
 	void PopulateUniforms();
 
+	/**
+	* シェーダーを読み込む
+	*/
 	void Load(const std::string& vertex, const std::string& fragment);
+	
+	
+	
 	void Bind();
 	void UnBind();
 	uint32_t GetAttribute(const std::string& name);
