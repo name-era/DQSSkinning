@@ -6,6 +6,8 @@
 #include <iostream>
 #include <vector>
 
+#include "glad.h"
+
 class Shader {
 private:
 	uint32_t _handle;
@@ -22,6 +24,7 @@ private:
 	*/
 	Shader& operator=(const Shader&);
 
+public:
 	/**
 	* コンストラクタ
 	*/
@@ -32,6 +35,7 @@ private:
 	* デストラクタ
 	*/
 	~Shader();
+
 
 	/**
 	* シェーダーファイルを読み込む

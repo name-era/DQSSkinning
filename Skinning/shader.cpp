@@ -1,5 +1,4 @@
 #include "shader.h"
-#include "glad.h"
 
 Shader::Shader() {
 	_handle = glCreateProgram();
