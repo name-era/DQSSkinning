@@ -12,12 +12,25 @@ private:
 	std::map<std::string, uint32_t> _attributes;
 	std::map < std::string, uint32_t> _uniforms;
 
-	//コピーコンストラクタ、代入演算子の禁止
+	/**
+	* コピーコンストラクタの禁止
+	*/
 	Shader(const Shader&);
+
+	/**
+	* 代入演算子の禁止
+	*/
 	Shader& operator=(const Shader&);
 
+	/**
+	* コンストラクタ
+	*/
 	Shader();
 	Shader(const std::string& vertex, const std::string& fragment);
+	
+	/**
+	* デストラクタ
+	*/
 	~Shader();
 
 	/**
@@ -55,13 +68,28 @@ private:
 	*/
 	void Load(const std::string& vertex, const std::string& fragment);
 	
-	
-	
+	/**
+	* シェーダーをバインドする
+	*/
 	void Bind();
+
+	/**
+	* シェーダーをアンバインドする
+	*/
 	void UnBind();
-	uint32_t GetAttribute(const std::string& name);
-	uint32_t GetUniform(const std::string& name);
+
+	/**
+	* シェーダーオブジェクトを取得する
+	*/
 	uint32_t GetHandle();
 
+	/**
+	* Attribute Indexを取得する
+	*/
+	uint32_t GetAttributeIndex(const std::string& name);
 
+	/**
+	* Uniform Indexを取得する
+	*/
+	uint32_t GetUniformIndex(const std::string& name);
 };

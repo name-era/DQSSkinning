@@ -1,7 +1,6 @@
 #include "shader.h"
 #include "glad.h"
 
-
 Shader::Shader() {
 	_handle = glCreateProgram();
 }
@@ -167,4 +166,34 @@ void Shader::Load(const std::string& vertex, const std::string& fragment) {
         PopulateAttributes();
         PopulateUniforms();
     }
+}
+
+void Shader::Bind() {
+    glUseProgram(_handle);
+}
+
+void Shader::UnBind() {
+    glUseProgram(0);
+}
+
+uint32_t Shader::GetHandle() {
+    return _handle;
+}
+
+uint32_t Shader::GetAttributeIndex(const std::string& name) {
+    auto itr = _attributes.find(name);
+    if (itr == _attributes.end()) {
+        std::cout << "invalid attribute name" << name << "\n";
+        return 0;
+    }
+    return itr->second;
+}
+
+uint32_t Shader::GetUniformIndex(const std::string& name) {
+    auto itr = _uniforms.find(name);
+    if (itr == _uniforms.end()) {
+        std::cout << "invalid uniform name" << name << "\n";
+        return 0;
+    }
+    return itr->second;
 }
