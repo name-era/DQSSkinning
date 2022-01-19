@@ -171,7 +171,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 			glEnable(GL_CULL_FACE);
 			glPointSize(5.0f);
 			glBindVertexArray(_vao);
-			glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+			glClearColor(0.5f, 0.6f, 0.7f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 			float aspect = (float)clientWidth / (float)clientHeight;

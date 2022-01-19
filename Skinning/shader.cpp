@@ -33,7 +33,8 @@ std::vector<char> Shader::ReadFile(const std::string& filename) {
 
 uint32_t Shader::CompileVertexShader(const std::vector<char> vertex) {
     uint32_t v = glCreateShader(GL_VERTEX_SHADER);
-    const char* source = vertex.data();
+    std::string s_vertex(vertex.begin(), vertex.end());
+    const char* source = s_vertex.c_str();
     glShaderSource(v, 1, &source, NULL);
     glCompileShader(v);
 
@@ -53,7 +54,8 @@ uint32_t Shader::CompileVertexShader(const std::vector<char> vertex) {
 
 uint32_t Shader::CompileFragmentShader(const std::vector<char> fragment) {
     uint32_t f = glCreateShader(GL_FRAGMENT_SHADER);
-    const char* source = fragment.data();
+    std::string s_fragment(fragment.begin(), fragment.end());
+    const char* source = s_fragment.c_str();
     glShaderSource(f, 1, &source, NULL);
     glCompileShader(f);
 
