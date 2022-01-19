@@ -1,5 +1,5 @@
 #include "attribute.h"
-#include "glad.h"
+#include "glad/glad.h"
 
 template Attribute<glm::vec2>;
 template Attribute<glm::vec3>;

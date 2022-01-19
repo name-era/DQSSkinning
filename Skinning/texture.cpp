@@ -1,6 +1,6 @@
 #include "texture.h"
 #include "stb/stb_image.h"
-#include "glad.h"
+#include "glad/glad.h"
 
 Texture::Texture() {
 	_width = 0;

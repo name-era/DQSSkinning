@@ -1,5 +1,5 @@
 #include "uniform.h"
-#include "glad.h"
+#include "glad/glad.h"
 
 template Uniform<int>;
 template Uniform<float>;
