@@ -1,4 +1,5 @@
 #include "shader.h"
+#include "glad.h"
 
 Shader::Shader() {
 	_handle = glCreateProgram();
@@ -94,15 +95,15 @@ bool Shader::LinkShaders(uint32_t vertex, uint32_t fragment) {
 
 void Shader::PopulateAttributes() {
     GLint count = -1;
-    GLsizei length;
+    int length;
     GLchar name[128];
     GLint size;
     GLenum type;
     glUseProgram(_handle);
     glGetProgramiv(_handle, GL_ACTIVE_ATTRIBUTES, &count);
-    for (GLuint i = 0; i < count; i++) {
+    for (int i = 0; i < count; i++) {
         memset(name, 0, sizeof(char) * 128);
-        glGetActiveAttrib(_handle, i, 128, &length, &size, &type, name);
+        glGetActiveAttrib(_handle, (GLuint)i, 128, &length, &size, &type, name);
         GLint attrib = glGetAttribLocation(_handle, name);
         if (attrib >= 0) {
             _attributes[name] = attrib;
@@ -114,7 +115,7 @@ void Shader::PopulateAttributes() {
 
 void Shader::PopulateUniforms() {
     GLint count = -1;
-    GLsizei length;
+    int length;
     GLchar name[128];
     GLint size;
     GLenum type;
@@ -122,9 +123,9 @@ void Shader::PopulateUniforms() {
 
     glUseProgram(_handle);
     glGetProgramiv(_handle, GL_ACTIVE_UNIFORMS, &count);
-    for (GLuint i = 0; i < count; i++) {
+    for (int i = 0; i < count; i++) {
         memset(name, 0, sizeof(char) * 128);
-        glGetActiveUniform(_handle, i, 128, &length, &size, &type, name);
+        glGetActiveUniform(_handle, (GLuint)i, 128, &length, &size, &type, name);
 
         GLint uniform = glGetUniformLocation(_handle, name);
         if (uniform >= 0) {
@@ -139,7 +140,7 @@ void Shader::PopulateUniforms() {
                 while (true) {
                     memset(testName, 0, sizeof(char) * 256);
                     //testName=uniformïœêîñº+[index]
-                    sprintf(testName, "%s[%d]", uniformName.c_str(), uniformIndex++);
+                    sprintf_s(testName, "%s[%d]", uniformName.c_str(), uniformIndex++);
                     int uniformLocation = glGetUniformLocation(_handle, testName);
                     if (uniformLocation < 0) {
                         break;

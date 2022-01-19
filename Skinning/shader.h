@@ -1,12 +1,11 @@
 #pragma once
-
 #include <map>
 #include <string>
 #include <fstream>
 #include <iostream>
 #include <vector>
 
-#include "glad.h"
+
 
 class Shader {
 private:
@@ -24,39 +23,26 @@ private:
 	*/
 	Shader& operator=(const Shader&);
 
-public:
-	/**
-	* コンストラクタ
-	*/
-	Shader();
-	Shader(const std::string& vertex, const std::string& fragment);
-	
-	/**
-	* デストラクタ
-	*/
-	~Shader();
-
-
 	/**
 	* シェーダーファイルを読み込む
 	*/
 	std::vector<char> ReadFile(const std::string& filename);
-	
+
 	/**
 	* 頂点シェーダーをコンパイルする
 	*/
 	uint32_t CompileVertexShader(const std::vector<char> vertex);
-	
+
 	/**
 	* シェーダーをコンパイルする
 	*/
 	uint32_t CompileFragmentShader(const std::vector<char> fragment);
-	
+
 	/**
 	* シェーダーをリンクする
 	*/
 	bool LinkShaders(uint32_t vertex, uint32_t fragment);
-	
+
 	/**
 	* Attribute変数を取得する
 	*/
@@ -67,11 +53,23 @@ public:
 	*/
 	void PopulateUniforms();
 
+public:
+	/**
+	* コンストラクタ
+	*/
+	Shader();
+	Shader(const std::string& vertex, const std::string& fragment);
+
+	/**
+	* デストラクタ
+	*/
+	~Shader();
+
 	/**
 	* シェーダーを読み込む
 	*/
 	void Load(const std::string& vertex, const std::string& fragment);
-	
+
 	/**
 	* シェーダーをバインドする
 	*/

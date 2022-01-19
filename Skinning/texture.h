@@ -1,14 +1,14 @@
 #pragma once
-#include "glad.h"
 #include <stdint.h>
 
 class Texture {
-private:
+protected:
 	uint32_t _width;
 	uint32_t _height;
 	uint32_t _channels;
-	GLuint _handle;
+	uint32_t _handle;
 
+private:
 	/**
 	* コピーコンストラクタの禁止
 	*/
@@ -49,7 +49,7 @@ public:
 	void Set(uint32_t uniformIndex, uint32_t textureIndex);
 
 	/**
-	* テクスチャのユニフォーム変数を初期化する
+	* テクスチャをアンバインドする
 	*/
 	void UnSet( uint32_t textureIndex);
 

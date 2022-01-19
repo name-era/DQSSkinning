@@ -1,7 +1,6 @@
 #pragma once
-
 #include "glm/glm.hpp"
-#include "glad.h"
+#include <vector>
 
 class IndexBuffer {
 
@@ -28,9 +27,14 @@ public:
 	~IndexBuffer();
 
 	/**
-	* Index Bufferの数を取得する
+	* Indexのデータを送る
 	*/
-	void SetIndex(const void* data, uint32_t arrayLength);
+	void Set(const void* data, uint32_t arrayLength);
+
+	/**
+	* Indexのデータをセットする
+	*/
+	void Set(std::vector<uint32_t>& input);
 
 	/**
 	* Index Bufferの数を取得する
@@ -41,7 +45,6 @@ public:
 	* Index Bufferのハンドルを取得する
 	*/
 	uint32_t GetHandle();
-
 
 
 	uint32_t _handle;

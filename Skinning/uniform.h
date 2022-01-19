@@ -1,7 +1,9 @@
 #pragma once
 #include "glm/glm.hpp"
-#include "glad.h"
+#include "glm/gtc/quaternion.hpp"
+#include <vector>
 
+template<typename T>
 class Uniform {
 
 private:
@@ -30,5 +32,14 @@ public:
 	/**
 	* uniform変数をセットする
 	*/
-	static void Set(uint32_t slot, const void* data, GLsizei arrayLength);
+	static void Set(uint32_t slot, T* inputArray, uint32_t arrayLength);
+
+	/**
+	* uniform変数をセットする
+	*/
+	static void Set(uint32_t slot, const T& value);
+	
+
+
+	static void Set(uint32_t slot, std::vector<T>& inputArray);
 };

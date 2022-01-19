@@ -1,7 +1,6 @@
 #pragma once
-
 #include "indexBuffer.h"
-#include <iostream>
+
 
 enum class DrawMode {
 	Points,
@@ -26,9 +25,9 @@ void Draw(IndexBuffer& inIndexBuffer, DrawMode mode);
 /**
 * 頂点をインスタンス描画する
 */
-void Draw(uint32_t vertexCount, DrawMode mode, uint32_t instanceCount);
+void DrawInstanced(uint32_t vertexCount, DrawMode mode, uint32_t instanceCount);
 
 /**
 * インデックスが指定する頂点をインスタンス描画する
 */
-void DrawInstances(IndexBuffer& inIndexBuffer, DrawMode mode, uint32_t instanceCount);
+void DrawInstanced(IndexBuffer& inIndexBuffer, DrawMode mode, uint32_t instanceCount);

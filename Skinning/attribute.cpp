@@ -1,40 +1,88 @@
 #include "attribute.h"
+#include "glad.h"
 
-Attribute::Attribute() {
+template Attribute<glm::vec2>;
+template Attribute<glm::vec3>;
+template Attribute<glm::vec4>;
+template Attribute<uint32_t>;
+template Attribute<float>;
+
+template<typename T>
+Attribute<T>::Attribute() {
 	glGenBuffers(1, &_handle);
 	_count = 0;
 }
 
-Attribute::~Attribute() {
+template<typename T>
+Attribute<T>::~Attribute() {
 	glDeleteBuffers(1, &_handle);
 }
 
-uint32_t Attribute::GetCount() {
+template<typename T>
+uint32_t Attribute<T>::GetCount() {
 	return _count;
 }
 
-uint32_t Attribute::GetHandle() {
+template<typename T>
+uint32_t Attribute<T>::GetHandle() {
 	return _handle;
 }
 
-//ÉTÉCÉYÇÕattributeÇÃ
-uint32_t Attribute::Set(const void* data, GLsizei arrayLength) {
+template<typename T>
+void Attribute<T>::Set(T* inputArray, uint32_t arrayLength) {
 	_count = arrayLength;
-	uint32_t size = sizeof(data);
+	uint32_t size = sizeof(T);
 
 	glBindBuffer(GL_ARRAY_BUFFER, _handle);
-	glBufferData(GL_ARRAY_BUFFER, size * _count, data, GL_STREAM_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, size * _count, inputArray, GL_STREAM_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void Attribute::SetAttribute(uint32_t slot, GLint size) {
+template<typename T>
+void Attribute<T>::Set(std::vector<T>& input) {
+	Set(&input[0], (uint32_t)input.size());
+}
+
+template<>
+void Attribute<uint32_t>::SetAttributePointer(uint32_t slot) {
+	glVertexAttribPointer(slot, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+}
+
+template<>
+void Attribute<float>::SetAttributePointer(uint32_t slot) {
+	glVertexAttribPointer(slot, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+}
+
+template<>
+void Attribute<glm::vec2>::SetAttributePointer(uint32_t slot) {
+	glVertexAttribPointer(slot, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+}
+
+template<>
+void Attribute<glm::vec3>::SetAttributePointer(uint32_t slot) {
+	glVertexAttribPointer(slot, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+}
+
+template<>
+void Attribute<glm::vec4>::SetAttributePointer(uint32_t slot) {
+	glVertexAttribPointer(slot, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+}
+
+template<>
+void Attribute<glm::quat>::SetAttributePointer(uint32_t slot) {
+	glVertexAttribPointer(slot, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+}
+
+template<typename T>
+void Attribute<T>::BindTo(uint32_t slot) {
 	glBindBuffer(GL_ARRAY_BUFFER, _handle);
 	glEnableVertexAttribArray(slot);
-	glVertexAttribPointer(slot, size, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	SetAttributePointer(slot);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void Attribute::UnBindAttribute(uint32_t slot) {
+template<typename T>
+void Attribute<T>::UnBind(uint32_t slot) {
 	glBindBuffer(GL_ARRAY_BUFFER, _handle);
 	glDisableVertexAttribArray(slot);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);

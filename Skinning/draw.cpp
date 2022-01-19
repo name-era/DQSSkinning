@@ -1,4 +1,6 @@
 #include "draw.h"
+#include "glad.h"
+#include <iostream>
 
 static GLenum DrawModeToGLEnum(DrawMode input) {
 	if (input == DrawMode::Points) {
@@ -40,11 +42,11 @@ void Draw(IndexBuffer& inIndexBuffer, DrawMode mode) {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void Draw(uint32_t vertexCount, DrawMode mode, uint32_t instanceCount) {
+void DrawInstanced(uint32_t vertexCount, DrawMode mode, uint32_t instanceCount) {
 	glDrawArraysInstanced(DrawModeToGLEnum(mode), 0, vertexCount, instanceCount);
 }
 
-void DrawInstances(IndexBuffer& inIndexBuffer, DrawMode mode, uint32_t instanceCount) {
+void DrawInstanced(IndexBuffer& inIndexBuffer, DrawMode mode, uint32_t instanceCount) {
 	uint32_t handle = inIndexBuffer.GetHandle();
 	uint32_t numIndices = inIndexBuffer.GetCount();
 

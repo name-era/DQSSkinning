@@ -1,13 +1,13 @@
 #pragma once
-
 #include "glm/glm.hpp"
-#include "glad.h"
+#include <vector>
 
+template<typename T>
 class Attribute {
-private:
+protected:
 	uint32_t _handle;
 	uint32_t _count;
-	
+private:
 	/**
 	* コピーコンストラクタの禁止
 	*/
@@ -43,15 +43,25 @@ public:
 	/**
 	* 頂点データを送る
 	*/
-	uint32_t Set(const void* data, GLsizei arrayLength);
+	void Set(T* inputArray, uint32_t arrayLength);
+
+	/**
+	* 頂点データをセットする
+	*/
+	void Set(std::vector<T>& input);
+
+	/**
+	* Attribute pointerをセットする
+	*/
+	void SetAttributePointer(uint32_t slot);
 
 	/**
 	* Attribute変数をセットする
 	*/
-	void SetAttribute(uint32_t slot, GLint size);
+	void BindTo(uint32_t slot);
 
 	/**
 	* Attribute変数をセットする
 	*/
-	void UnBindAttribute(uint32_t slot);
+	void UnBind(uint32_t slot);
 };

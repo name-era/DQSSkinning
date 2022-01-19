@@ -1,8 +1,11 @@
+#pragma warning(disable : 28251)
+#pragma warning(disable : 28159)
 #define _CRT_SECURE_NO_WARNINGS
 #define WIN32_LEAN_AND_MEAN
 #define WIN32_EXTRA_LEAN
 
 #include "glad.h"
+#undef APIENTRY
 #include <Windows.h>
 #include <iostream>
 #include "app.h"
