@@ -50,7 +50,7 @@ void Attribute<uint32_t>::SetAttributePointer(uint32_t slot) {
 
 template<>
 void Attribute<float>::SetAttributePointer(uint32_t slot) {
-	glVertexAttribPointer(slot, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glVertexAttribPointer(slot, 1, GL_FLOAT, GL_FALSE, 0, (void*)0);
 }
 
 template<>
@@ -60,17 +60,17 @@ void Attribute<glm::vec2>::SetAttributePointer(uint32_t slot) {
 
 template<>
 void Attribute<glm::vec3>::SetAttributePointer(uint32_t slot) {
-	glVertexAttribPointer(slot, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glVertexAttribPointer(slot, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 }
 
 template<>
 void Attribute<glm::vec4>::SetAttributePointer(uint32_t slot) {
-	glVertexAttribPointer(slot, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glVertexAttribPointer(slot, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
 }
 
 template<>
 void Attribute<glm::quat>::SetAttributePointer(uint32_t slot) {
-	glVertexAttribPointer(slot, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glVertexAttribPointer(slot, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
 }
 
 template<typename T>

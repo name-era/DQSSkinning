@@ -168,7 +168,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 			glViewport(0, 0, clientWidth, clientHeight);
 			glEnable(GL_DEPTH_TEST);
-			glEnable(GL_CULL_FACE);
+			//glEnable(GL_CULL_FACE);
 			glPointSize(5.0f);
 			glBindVertexArray(_vao);
 			glClearColor(0.5f, 0.6f, 0.7f, 1.0f);
