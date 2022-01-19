@@ -23,6 +23,9 @@ protected:
 	IndexBuffer* _indexBuffer;
 
 public:
+	
+	App();
+	
 	/**
 	* ‰Šú‰»
 	*/

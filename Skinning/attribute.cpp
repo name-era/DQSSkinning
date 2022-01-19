@@ -31,7 +31,7 @@ uint32_t Attribute<T>::GetHandle() {
 template<typename T>
 void Attribute<T>::Set(T* inputArray, uint32_t arrayLength) {
 	_count = arrayLength;
-	uint32_t size = sizeof(T);
+	uint64_t size = sizeof(T);
 
 	glBindBuffer(GL_ARRAY_BUFFER, _handle);
 	glBufferData(GL_ARRAY_BUFFER, size * _count, inputArray, GL_STREAM_DRAW);

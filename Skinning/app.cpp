@@ -2,6 +2,16 @@
 #include "uniform.h"
 #include "draw.h"
 
+App::App() {
+	_rotation = 0;
+	_shader = nullptr;
+	_texture = nullptr;
+	_vertexPositions = nullptr;
+	_vertexNormals = nullptr;
+	_vertexTexCoords = nullptr;
+	_indexBuffer = nullptr;
+}
+
 void App::Initialize() {
 	_rotation = 0.0f;
 	_shader = new Shader("Shaders/shader.vert", "Shaders/shader.frag");
