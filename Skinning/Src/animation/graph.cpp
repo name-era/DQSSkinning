@@ -74,7 +74,6 @@ QuartanionFrame Graph::MakeFrame(float time, const glm::quat& value) {
 	return MakeFrame(time, glm::quat(0, 0, 0, 0), value, glm::quat(0, 0, 0, 0));
 }
 
-
 void Graph::Initialize() {
 	
 	//line
@@ -210,8 +209,52 @@ void Graph::Initialize() {
 		_controledPoints->Set(controledPos);
 		_tangentLines->Set(preControledLines);
 		_tangentLines->Set(nextControledLines);
+	}
+}
 
+void Graph::DrawGraph(GraphDrawMode mode, const glm::vec3& color, const glm::mat4& mvp, Attribute<glm::vec3>* points) {
+	_shader->Bind();
+	Uniform <glm::mat4>::Set(_shader->GetUniformIndex("mvp"), mvp);
+	Uniform<glm::vec3>::Set(_shader->GetUniformIndex("color"), color);
+
+	points->BindTo(_shader->GetAttributeIndex("position"));
+	if (mode == GraphDrawMode::Lines) {
+		Draw(points->GetCount(), DrawMode::Lines);
+	}
+	else if (mode == GraphDrawMode::Loop) {
+		Draw(points->GetCount(), DrawMode::LineLoop);
+	}
+	else if (mode == GraphDrawMode::Strip) {
+		Draw(points->GetCount(), DrawMode::LineStrip);
+	}
+	else {
+		Draw(points->GetCount(), DrawMode::Points);
 	}
 
+	points->UnBind(_shader->GetAttributeIndex("position"));
+	_shader->UnBind();
+}
+
+void Graph::Render(float aspectRatio) {
+	glm::mat4 model;
+	glm::mat4 view = glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+	glm::mat4 projection = glm::ortho(0.0f, aspectRatio * 22.0f, 0.0f, 22.0f, 0.001f, 10.0f);
+
+	glm::mat4 mvp = projection * view * model;
+	DrawGraph(GraphDrawMode::Lines, glm::vec3(1, 1, 1), mvp, _coordinateAxis);
+	DrawGraph(GraphDrawMode::Lines, glm::vec3(0, 1, 0), mvp, _scalarTrackLines);
+	DrawGraph(GraphDrawMode::Points, glm::vec3(1, 0, 0), mvp, _controledPoints);
+	DrawGraph(GraphDrawMode::Lines, glm::vec3(0, 0, 1), mvp, _tangentLines);
+}
+
+void Graph::ShutDown() {
+	_scalarTracks.clear();
+	_scalarTracksLooping.clear();
+
+	delete _shader;
+	delete _coordinateAxis;
+	delete _scalarTrackLines;
+	delete _controledPoints;
+	delete _tangentLines;
 }
 

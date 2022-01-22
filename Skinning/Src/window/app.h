@@ -14,13 +14,7 @@
 
 class App : public Application {
 protected:
-	float _rotation;
-	Shader* _shader;
-	Texture* _texture;
-	Attribute<glm::vec3>* _trackPositions;
-	Attribute<glm::vec3>* _vertexNormals;
-	Attribute<glm::vec2>* _vertexTexCoords;
-	IndexBuffer* _indexBuffer;
+
 
 public:
 	

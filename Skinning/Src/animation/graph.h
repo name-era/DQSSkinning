@@ -1,11 +1,15 @@
 #pragma once
+
+#include "appBase.h"
 #include "track.h"
 #include "shader.h"
 #include "attribute.h"
+#include "uniform.h"
+#include "draw.h"
 #include <vector>
 
 
-class Graph {
+class Graph : public Application {
 protected:
 	std::vector<ScalarTrack> _scalarTracks;
 	std::vector<bool> _scalarTracksLooping;
@@ -32,5 +36,13 @@ private:
 	QuartanionFrame MakeFrame(float time, const glm::quat& value);
 
 public:
+
+	enum class GraphDrawMode {
+		Lines, Loop, Strip, Points
+	};
+
 	void Initialize();
+	void DrawGraph(GraphDrawMode mode, const glm::vec3& color, const glm::mat4& mvp, Attribute<glm::vec3>* points);
+	void Render(float aspectRatio);
+	void ShutDown();
 };

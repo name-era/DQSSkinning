@@ -42,10 +42,5 @@ void App::Render(float aspectRatio) {
 }
 
 void App::Shutdown() {
-	delete _shader;
-	delete _texture;
-	delete _vertexPositions;
-	delete _vertexNormals;
-	delete _vertexTexCoords;
-	delete _indexBuffer;
+
 }

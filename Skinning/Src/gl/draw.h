@@ -1,7 +1,6 @@
 #pragma once
 #include "indexBuffer.h"
 
-
 enum class DrawMode {
 	Points,
 	LineStrip,
