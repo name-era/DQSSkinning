@@ -117,5 +117,50 @@ void Graph::Initialize() {
 	_scalarTracks.push_back(MakeScalarTrack(Interpolation::Cubic, 5, MakeFrame(0.25f, 0.0f, 0.0f, 0.0f), MakeFrame(0.375f, -10.0f, 0.5f, -10.0f), MakeFrame(0.5f, 0.0f, 1.0f, 0.0f), MakeFrame(0.875f, 10.0f, 0.5f, 10.0f), MakeFrame(1.0f, 0.0f, 0.0f, 0.0f)));
 	_scalarTracksLooping.push_back(true);
 
+
+
+
+	_shader = new Shader("Shaders/track.vert", "Shaders/track.frag");
+
+	std::vector<glm::vec3> coordinateLinesPos;
+
+	//ç¿ïWé≤
+	for (uint32_t i = 0; i < 10; i++) {
+		float yPos = (i * 2.0f) + ((float)i * 0.2) + 0.1f;
+		float height = 1.8f;
+
+		float left = 1.0f;
+		float right = 14.0f;
+
+		//ècé≤
+		coordinateLinesPos.push_back(glm::vec3(left, yPos, 0));
+		coordinateLinesPos.push_back(glm::vec3(left, yPos + height, 0));
+		//â°é≤
+		coordinateLinesPos.push_back(glm::vec3(left, yPos, 0));
+		coordinateLinesPos.push_back(glm::vec3(right, yPos, 0));
+	}
+	_coordinateAxis->Set(coordinateLinesPos);
+
+	//ÉOÉâÉt
+	for (uint32_t i = 0; i < _scalarTracks.size(); i++) {
+		float yPos = ((9 - i) * 2.0f) + ((9 - i) * 0.2f) + 0.1f;
+		float height = 1.8f;
+
+		float left = 1.0f;
+		float right = 14.0f;
+		float xRange = (right - left) / 150.0f;
+
+		for (uint32_t j = 0; j < 149; j++) {
+			float thisOrdinalNum = j;
+			float nextOrdinalNum = j + 1;
+			
+			float thisX = left + thisOrdinalNum * xRange;
+			float nextX = left + nextOrdinalNum * xRange;
+
+			float thisY = _scalarTracks[i].GetPos(thisOrdinalNum, _scalarTracksLooping[i]);
+
+		}
+	}
+
 }
 
