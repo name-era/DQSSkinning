@@ -12,8 +12,14 @@ protected:
 
 
 	Shader* _shader;
+	//ç¿ïWé≤
 	Attribute<glm::vec3>* _coordinateAxis;
-	Attribute<glm::vec2>* _scalarTrackLines;
+	//lines
+	Attribute<glm::vec3>* _scalarTrackLines;
+	//êßå‰ì_
+	Attribute<glm::vec3>* _controledPoints;
+	//êßå‰ê¸
+	Attribute<glm::vec3>* _tangentLines;
 
 private:
 	ScalarTrack MakeScalarTrack(Interpolation interp, uint32_t numFrames, ...);

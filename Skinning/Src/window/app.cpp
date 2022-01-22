@@ -9,34 +9,10 @@ App::App() {
 void App::Initialize() {
 
 
-
-	_indexBuffer = new IndexBuffer();
-
-	std::vector<glm::vec3> positions;
-	positions.push_back(glm::vec3(-1, -1, 0));
-	positions.push_back(glm::vec3(-1, 1, 0));
-	positions.push_back(glm::vec3(1, -1, 0));
-	positions.push_back(glm::vec3(1, 1, 0));
-
-	_vertexPositions->Set(positions);
-
-	std::vector<glm::vec3> normals;
-	normals.resize(4, glm::vec3(0, 0, 1));
-	_vertexNormals->Set(normals);
-
-	std::vector<glm::vec2> uvs;
-	uvs.push_back(glm::vec2(0, 0));
-	uvs.push_back(glm::vec2(0, 1));
-	uvs.push_back(glm::vec2(1, 0));
-	uvs.push_back(glm::vec2(1, 1));
-	_vertexTexCoords->Set(uvs);
 }
 
 void App::Update(float deltaTime) {
-	_rotation += deltaTime * 45.0f;
-	while (_rotation > 360.0f) {
-		_rotation -= 360.0f;
-	}
+
 }
 
 void App::Render(float aspectRatio) {

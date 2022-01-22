@@ -118,10 +118,7 @@ void Graph::Initialize() {
 	_scalarTracksLooping.push_back(true);
 
 
-
-
 	_shader = new Shader("Shaders/track.vert", "Shaders/track.frag");
-
 	std::vector<glm::vec3> coordinateLinesPos;
 
 	//座標軸
@@ -143,23 +140,77 @@ void Graph::Initialize() {
 
 	//グラフ
 	for (uint32_t i = 0; i < _scalarTracks.size(); i++) {
-		float yPos = ((9 - i) * 2.0f) + ((9 - i) * 0.2f) + 0.1f;
+		float bottom = ((9 - i) * 2.0f) + ((9 - i) * 0.2f) + 0.1f;
 		float height = 1.8f;
 
 		float left = 1.0f;
 		float right = 14.0f;
-		float xRange = (right - left) / 150.0f;
+		float xRange = right - left;
+
+		std::vector<glm::vec3> graphPos;
 
 		for (uint32_t j = 0; j < 149; j++) {
-			float thisOrdinalNum = j;
-			float nextOrdinalNum = j + 1;
+			float thisOrdinalNum = j / 149.0f;
+			float nextOrdinalNum = (j + 1) / 149.0f;
 			
 			float thisX = left + thisOrdinalNum * xRange;
 			float nextX = left + nextOrdinalNum * xRange;
 
-			float thisY = _scalarTracks[i].GetPos(thisOrdinalNum, _scalarTracksLooping[i]);
+			float thisY = _scalarTracks[i].GetValue(thisOrdinalNum, _scalarTracksLooping[i]);
+			float nextY = _scalarTracks[i].GetValue(nextOrdinalNum, _scalarTracksLooping[i]);
 
+			thisY = bottom + thisY * height;
+			nextY = bottom + nextY * height;
+
+			graphPos.push_back(glm::vec3(thisX, thisY, 0.1f));
+			graphPos.push_back(glm::vec3(nextX, nextY, 0.1f));
 		}
+
+		_scalarTrackLines->Set(graphPos);
+
+		//制御点
+		std::vector<glm::vec3> controledPos;
+		std::vector<glm::vec3> preControledLines;
+		std::vector<glm::vec3> nextControledLines;
+		
+		for (uint32_t j = 0; j < _scalarTracks.size(); j++) {
+			//time：0.0～1.0
+			float thisTime = _scalarTracks[i][j].time;
+			float thisY = bottom + _scalarTracks[i].GetValue(thisTime, _scalarTracksLooping[i]) * height;
+			float thisX = left + thisTime * xRange;
+			controledPos.push_back(glm::vec3(thisX, thisY, 0.9f));
+
+			if (j > 0) {
+				//微小時間ずらす
+				float prevY = bottom + _scalarTracks[i].GetValue(thisTime - 0.0001f, _scalarTracksLooping[i]) * height;
+				float prevX = left + (thisTime - 0.0001f) * xRange;
+
+				glm::vec3 thisPos = glm::vec3(thisX, thisY, 0.6f);
+				glm::vec3 prevPos = glm::vec3(prevX, prevY, 0.6f);
+				glm::vec3 handledPos = thisPos + glm::normalize(prevPos - thisPos);
+
+				preControledLines.push_back(thisPos);
+				preControledLines.push_back(handledPos);
+			}
+
+			//線形補間とキュービック補間をするときは次のトラックの制御線も描画する
+			if (j < _scalarTracks.size()-1 && _scalarTracks[i].GetInterpolation()!=Interpolation::Constant) {
+				float nextY = bottom + _scalarTracks[i].GetValue(thisTime + 0.0001f, _scalarTracksLooping[i]) * height;
+				float nextX = left + (thisTime * 0.0001f) * xRange;
+
+				glm::vec3 thisPos = glm::vec3(thisX, thisY, 0.6f);
+				glm::vec3 nextPos = glm::vec3(nextX, nextY, 0.6f);
+				glm::vec3 handledPos = thisPos + glm::normalize(nextPos - thisPos);
+
+				nextControledLines.push_back(thisPos);
+				nextControledLines.push_back(handledPos);
+			}
+		}
+
+		_controledPoints->Set(controledPos);
+		_tangentLines->Set(preControledLines);
+		_tangentLines->Set(nextControledLines);
+
 	}
 
 }

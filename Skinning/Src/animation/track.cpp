@@ -180,3 +180,8 @@ template<typename T, uint32_t N>
 Frame<N>& Track<T, N>::operator[](uint32_t index) {
 	_frames[index];
 }
+
+template<typename T, uint32_t N>
+Interpolation Track<T, N>::GetInterpolation() {
+	return _interpolation;
+}

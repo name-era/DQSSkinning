@@ -13,7 +13,7 @@ protected:
 	Interpolation _interpolation;
 	std::vector<Frame<N>> _frames;
 
-public:
+protected:
 
 	T Cast(float* value);
 
@@ -42,7 +42,7 @@ public:
 	*/
 	T GetCubicValue(float time, bool looping);
 
-protected:
+public:
 
 	/**
 	* コンストラクタ
@@ -73,6 +73,8 @@ protected:
 	* フレームを追加する
 	*/
 	Frame<N>& operator[](uint32_t index);
+
+	Interpolation GetInterpolation();
 };
 
 typedef Track<float, 1> ScalarTrack;
