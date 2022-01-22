@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
-#include <glm/gtx/matrix_interpolation.hpp>
+#include <glm/gtx/spline.hpp>
 #include <vector>
 
 template<typename T, uint32_t N>
@@ -14,24 +14,60 @@ protected:
 	std::vector<Frame<N>> _frames;
 
 public:
-	Track();
-	~Track();
 
-	void SetInterpolation(Interpolation interpolation);
-	void Resize(uint32_t size);
+	T Cast(float* value);
 
-	uint32_t FrameIndex(float time, bool looping);
-	T GetConstantPos(float time, bool looping);
+	/**
+	* フレームのインデックスを取得する
+	*/
+	uint32_t GetFrameIndex(float time, bool looping);
+
 	/**
 	* 時間をトラックの範囲に合わせる
 	*/
 	float AdjustTimeToFitTrack(float time, bool looping);
 
 	/**
+	* 補間しないときの値を求める
+	*/
+	T GetConstantValue(float time, bool looping);
+
+	/**
 	* 線形補間したときの値を求める
 	*/
-	T GetLinearPos(float time, bool looping);
-	T GetPos(float time, bool looping);
+	T GetLinearValue(float time, bool looping);
+
+	/**
+	* キュービック補間したときの値を求める
+	*/
+	T GetCubicValue(float time, bool looping);
+
+protected:
+
+	/**
+	* コンストラクタ
+	*/
+	Track() {};
+
+	/**
+	* デストラクタ
+	*/
+	~Track() {};
+
+	/**
+	* 補間の種類をセットする
+	*/
+	void SetInterpolation(Interpolation interpolation);
+
+	/**
+	* フレームの長さをセットする
+	*/
+	void Resize(uint32_t size);
+	
+	/**
+	* 値を求める
+	*/
+	T GetValue(float time, bool looping);
 
 	/**
 	* フレームを追加する
