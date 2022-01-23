@@ -28,6 +28,11 @@ void Track<T, N>::Resize(uint32_t size) {
 	_frames.resize(size);
 }
 
+template<typename T,uint32_t N>
+uint32_t Track<T, N>::GetSize() {
+	return (uint32_t)_frames.size();
+}
+
 template<> float Track<float, 1>::Cast(float* value) {
 	return value[0];
 }
@@ -43,13 +48,13 @@ template<> glm::quat Track<glm::quat, 4>::Cast(float* value) {
 
 template<typename T, uint32_t N>
 uint32_t Track<T, N>::GetFrameIndex(float time, bool looping) {
-	uint32_t size = (uint32_t)_frames.size();
-	if (size <= 1) {
+	uint32_t frameSize = (uint32_t)_frames.size();
+	if (frameSize <= 1) {
 		return -1;
 	}
 	if (looping) {
 		float startTime = _frames[0].time;
-		float endTime = _frames[size - 1].time;
+		float endTime = _frames[frameSize - 1].time;
 		float dulation = endTime - startTime;
 
 		time = fmodf(time - startTime, endTime - startTime);
@@ -64,12 +69,12 @@ uint32_t Track<T, N>::GetFrameIndex(float time, bool looping) {
 			return 0;
 		}
 		//最後のコマ以降
-		if (time >= _frames[size - 2].time) {
-			return size - 2;
+		if (time >= _frames[frameSize - 2].time) {
+			return frameSize - 2;
 		}
 	}
 
-	for (uint32_t i = size - 1; i >= 0; i--) {
+	for (int i = (int)frameSize - 1; i >= 0; i--) {
 		//コマ打ちされている時間以降であればそのコマを返す
 		if (time > _frames[i].time) {
 			return i;

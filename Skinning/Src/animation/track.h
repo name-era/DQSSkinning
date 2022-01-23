@@ -65,10 +65,15 @@ public:
 	void SetInterpolation(Interpolation interpolation);
 
 	/**
-	* フレームの長さをセットする
+	* フレームサイズをセットする
 	*/
 	void Resize(uint32_t size);
 	
+	/**
+	* フレームサイズを取得する
+	*/
+	uint32_t GetSize();
+
 	/**
 	* 値を求める
 	*/

@@ -7,6 +7,7 @@
 #include "uniform.h"
 #include "draw.h"
 #include <vector>
+#include <glm/gtc/type_ptr.hpp>
 
 
 class Graph : public Application {
