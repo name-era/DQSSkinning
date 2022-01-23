@@ -239,7 +239,7 @@ void Graph::DrawGraph(GraphDrawMode mode, const glm::vec3& color, const glm::mat
 
 void Graph::Render(float aspectRatio) {
 	glm::mat4 view = glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-	glm::mat4 projection = glm::ortho(0.0f, aspectRatio * 25.0f, 0.0f, 25.0f, 0.001f, 10.0f);
+	glm::mat4 projection = glm::ortho(0.0f, aspectRatio * 30.0f, 0.0f, 30.0f, 0.001f, 10.0f);
 	glm::mat4 mvp = projection * view;
 
 	DrawGraph(GraphDrawMode::Lines, glm::vec3(1, 1, 1), mvp, _coordinateAxis);
