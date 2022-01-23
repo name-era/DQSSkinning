@@ -4,6 +4,20 @@ template Track<float, 1>;
 template Track<glm::vec3, 3>;
 template Track<glm::quat, 4>;
 
+namespace TrackHelpers {
+	inline float AdjustHermiteResult(float f) {
+		return f;
+	}
+
+	inline glm::vec3 AdjustHermiteResult(const glm::vec3& v) {
+		return v;
+	}
+
+	inline glm::quat AdjustHermiteResult(const glm::quat& q) {
+		return glm::normalize(q);
+	}
+}
+
 template<typename T, uint32_t N>
 void Track<T, N>::SetInterpolation(Interpolation interpolation) {
 	_interpolation = interpolation;
@@ -29,7 +43,7 @@ template<> glm::quat Track<glm::quat, 4>::Cast(float* value) {
 
 template<typename T, uint32_t N>
 uint32_t Track<T, N>::GetFrameIndex(float time, bool looping) {
-	uint32_t size = _frames.size();
+	uint32_t size = (uint32_t)_frames.size();
 	if (size <= 1) {
 		return -1;
 	}
@@ -61,11 +75,12 @@ uint32_t Track<T, N>::GetFrameIndex(float time, bool looping) {
 			return i;
 		}
 	}
+	return -1;
 }
 
 template<typename T, uint32_t N>
 float Track<T, N>::AdjustTimeToFitTrack(float time, bool looping) {
-	uint32_t size = _frames.size();
+	uint32_t size = (uint32_t)_frames.size();
 	if (size <= 1) {
 		return 0.0f;
 	}
@@ -130,6 +145,23 @@ T Track<T, N>::GetLinearValue(float time, bool looping) {
 }
 
 template<typename T, uint32_t N>
+T Track<T, N>::Hermite(float t, const T& p1, const T& s1, const T& _p2, const T& s2) {
+	float tt = t * t;
+	float ttt = tt * t;
+
+	T p2 = _p2;
+
+	float h1 = 2.0f * ttt - 3.0f * tt + 1.0f;
+	float h2 = -2.0f * ttt + 3.0f * tt;
+	float h3 = ttt - 2.0f * tt + t;
+	float h4 = ttt - tt;
+
+	T result = p1 * h1 + p2 * h2 + s1 * h3 + s2 * h4;
+
+	return TrackHelpers::AdjustHermiteResult(result);
+}
+
+template<typename T, uint32_t N>
 T Track<T, N>::GetCubicValue(float time, bool looping) {
 	uint32_t thisFrame = GetFrameIndex(time, looping);
 	if (thisFrame < 0 || thisFrame >= _frames.size()) {
@@ -147,19 +179,19 @@ T Track<T, N>::GetCubicValue(float time, bool looping) {
 	//現在のフレームの開始時間からどれくらいの時間が進んでいるか
 	float t = (trackTime - _frames[thisFrame].time) / frameDelta;
 
-	T point1 = Cast(_frames[thisFrame].value[0]);
+	T point1 = Cast(&_frames[thisFrame].value[0]);
 	//傾き
 	T slope1;
 	memcpy(&slope1, _frames[thisFrame].out, N * sizeof(float));
 	slope1 *= frameDelta;
 
-	T point2 = Cast(_frames[nextFrame].value[0]);
+	T point2 = Cast(&_frames[nextFrame].value[0]);
 	//傾き
 	T slope2;
 	memcpy(&slope2, _frames[nextFrame].in, N * sizeof(float));
 	slope2 *= frameDelta;
-
-	return glm::hermite(point1, slope1, point2, slope2, t);
+	
+	return Hermite(t, point1, slope1, point2, slope2);
 }
 
 template<typename T, uint32_t N>
@@ -178,7 +210,7 @@ T Track<T, N>::GetValue(float time, bool looping) {
 
 template<typename T, uint32_t N>
 Frame<N>& Track<T, N>::operator[](uint32_t index) {
-	_frames[index];
+	return _frames[index];
 }
 
 template<typename T, uint32_t N>

@@ -3,7 +3,6 @@
 #include "frame.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
-#include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/spline.hpp>
 #include <vector>
 
@@ -36,6 +35,12 @@ protected:
 	* 線形補間したときの値を求める
 	*/
 	T GetLinearValue(float time, bool looping);
+
+
+	/**
+	* キュービックエルミート補間用関数
+	*/
+	T Hermite(float t, const T& p1, const T& s1, const T& _p2, const T& s2);
 
 	/**
 	* キュービック補間したときの値を求める
@@ -75,6 +80,7 @@ public:
 	Frame<N>& operator[](uint32_t index);
 
 	Interpolation GetInterpolation();
+
 };
 
 typedef Track<float, 1> ScalarTrack;

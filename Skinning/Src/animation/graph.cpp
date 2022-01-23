@@ -122,7 +122,7 @@ void Graph::Initialize() {
 
 	//ç¿ïWé≤
 	for (uint32_t i = 0; i < 10; i++) {
-		float yPos = (i * 2.0f) + ((float)i * 0.2) + 0.1f;
+		float yPos = (i * 2.0f) + (i * 0.2f) + 0.1f;
 		float height = 1.8f;
 
 		float left = 1.0f;
