@@ -8,7 +8,7 @@
 #undef APIENTRY
 #include <Windows.h>
 #include <iostream>
-#include "app.h"
+#include "graph.h"
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR, int);
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -40,7 +40,7 @@ Application* _app = 0;
 GLuint _vao = 0;
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow) {
-	_app = new App();
+	_app = new Graph();
 
 	//initialize wndclassex
 	WNDCLASSEX wndclass;
