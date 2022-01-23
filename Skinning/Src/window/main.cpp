@@ -4,11 +4,12 @@
 #define WIN32_LEAN_AND_MEAN
 #define WIN32_EXTRA_LEAN
 
-#include "glad/glad.h"
+#include <glad/glad.h>
 #undef APIENTRY
 #include <Windows.h>
 #include <iostream>
 #include "graph.h"
+#include "gui.h"
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR, int);
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -37,10 +38,12 @@ typedef BOOL(WINAPI* PFNWGLSWAPINTERVALEXTPROC) (int);
 typedef int (WINAPI* PFNWGLGETSWAPINTERVALEXTPROC) (void);
 
 Application* _app = 0;
+Gui* _gui = 0;
 GLuint _vao = 0;
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow) {
 	_app = new Graph();
+	_gui = new Gui();
 
 	//initialize wndclassex
 	WNDCLASSEX wndclass;
@@ -140,11 +143,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 	ShowWindow(hwnd, SW_SHOW);
 	UpdateWindow(hwnd);
+
 	_app->Initialize();
+	_gui->Initialize(&hwnd);
 
 	DWORD lastTick = GetTickCount();
 	MSG msg;
 	while (true) {
+
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
 			if (msg.message == WM_QUIT) {
 				break;
@@ -152,6 +158,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
+
 		DWORD thisTick = GetTickCount();
 		//convert from milisec to sec
 		float deltaTime = float(thisTick - lastTick) * 0.001f;
@@ -178,6 +185,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 			_app->Render(aspect);
 		}
 
+		if (_gui != 0) {
+			_gui->Render();
+		}
+
 		if (_app != 0) {
 			SwapBuffers(hdc);
 			//if vsynch is enabled, glFinish needs to be called
@@ -185,6 +196,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 				glFinish();
 			}
 		}
+
 	}
 
 	if (_app != 0) {
@@ -194,12 +206,22 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	return (int)msg.wParam;
 }
 
+//ImGUI入力用のコールバック関数
+extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam) {
+
+	if (ImGui_ImplWin32_WndProcHandler(hwnd, iMsg, wParam, lParam)) {
+		return true;
+	}
+
 	switch (iMsg) {
 	case WM_CLOSE:
 		if (_app != 0) {
 			_app->Shutdown();
 			_app = 0;
+			_gui->Shutdown();
+			_gui = 0;
 			DestroyWindow(hwnd);
 		}
 		else {
