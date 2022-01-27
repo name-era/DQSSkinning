@@ -17,6 +17,7 @@ struct Transform {
 };
 
 Transform Combine(const Transform& a, const Transform& b);
+Transform Mat4ToTransform(const glm::mat4& m);
 glm::mat4 TransformToMat4(const Transform& t);
 bool operator==(const Transform& a, const Transform& b);
 bool operator!=(const Transform& a, const Transform& b);

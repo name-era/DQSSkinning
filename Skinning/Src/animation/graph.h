@@ -6,12 +6,15 @@
 #include "attribute.h"
 #include "uniform.h"
 #include "draw.h"
+#include "pose.h"
 #include <vector>
 #include <glm/gtc/type_ptr.hpp>
 
 
 class Graph : public Application {
 protected:
+	Pose _restPose;
+
 	std::vector<ScalarTrack> _scalarTracks;
 	std::vector<bool> _scalarTracksLooping;
 

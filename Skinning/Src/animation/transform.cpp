@@ -14,6 +14,31 @@ Transform Combine(const Transform& a, const Transform& b) {
 	return out;
 }
 
+Transform Mat4ToTransform(const glm::mat4& m) {
+
+	Transform out;
+	out.position = glm::vec3(m[12], m[13], m[14]);
+	//glm::mat4 rotMatrix=glm::lookAt(vec3()
+	//out.rotation = glm::quat_cast(m);
+
+	//mat4 rotScaleMat(
+	//	m.v[0], m.v[1], m.v[2], 0,
+	//	m.v[4], m.v[5], m.v[6], 0,
+	//	m.v[8], m.v[9], m.v[10], 0,
+	//	0, 0, 0, 1
+	//);
+	//mat4 invRotMat = quatToMat4(inverse(out.rotation));
+	//mat4 scaleSkewMat = rotScaleMat * invRotMat;
+
+	//out.scale = vec3(
+	//	scaleSkewMat.v[0],
+	//	scaleSkewMat.v[5],
+	//	scaleSkewMat.v[10]
+	//);
+
+	return out;
+}
+
 glm::mat4 TransformToMat4(const Transform& t) {
 	glm::vec3 x = t.rotation * glm::vec3(1, 0, 0);
 	glm::vec3 y = t.rotation * glm::vec3(0, 1, 0);

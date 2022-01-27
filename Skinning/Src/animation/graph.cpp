@@ -1,5 +1,6 @@
 #include "graph.h"
 #include <cstdarg>
+#include "gltfLoader.h"
 
 ScalarTrack Graph::MakeScalarTrack(Interpolation interp, uint32_t numFrames, ...) {
 	ScalarTrack result;
@@ -75,6 +76,8 @@ QuartanionFrame Graph::MakeFrame(float time, const glm::quat& value) {
 }
 
 void Graph::Initialize() {
+	cgltf_data* gltf = LoadGLTFFile("Assets/Woman.gltf");
+	_restPose = 
 
 	_shader = new Shader("Shaders/track.vert", "Shaders/track.frag");
 	_coordinateAxis = new Attribute<glm::vec3>();
