@@ -44,23 +44,23 @@ std::string& AnimationClip::GetName() {
 }
 
 float AnimationClip::AdjustTime(float inTime) {
-	if (mLooping) {
-		float duration = mEndTime - mStartTime;
+	if (_isLoop) {
+		float duration = _endTime - _startTime;
 		if (duration <= 0) {
 			return 0.0f;
 		}
-		inTime = fmodf(inTime - mStartTime, mEndTime - mStartTime);
+		inTime = fmodf(inTime - _startTime, _endTime - _startTime);
 		if (inTime < 0.0f) {
-			inTime += mEndTime - mStartTime;
+			inTime += _endTime - _startTime;
 		}
-		inTime = inTime + mStartTime;
+		inTime = inTime + _startTime;
 	}
 	else {
-		if (inTime < mStartTime) {
-			inTime = mStartTime;
+		if (inTime < _startTime) {
+			inTime = _startTime;
 		}
-		if (inTime > mEndTime) {
-			inTime = mEndTime;
+		if (inTime > _endTime) {
+			inTime = _endTime;
 		}
 	}
 	return inTime;
@@ -71,13 +71,13 @@ float AnimationClip::Sample(Pose& outPose, float time) {
 	if ((_endTime-_startTime) == 0.0f) {
 		return 0.0f;
 	}
-	time = AdjustTimeToFitRange(time);
+	time = AdjustTime(time);
 
-	unsigned int size = mTracks.size();
+	unsigned int size = _tracks.size();
 	for (unsigned int i = 0; i < size; ++i) {
-		unsigned int joint = mTracks[i].GetId();
+		unsigned int joint = _tracks[i].GetId();
 		Transform local = outPose.GetLocalTransform(joint);
-		Transform animated = mTracks[i].Sample(local, time, mLooping);
+		Transform animated = _tracks[i].GetValue(local, time, _isLoop);
 		outPose.SetLocalTransform(joint, animated);
 	}
 	return time;

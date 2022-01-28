@@ -29,7 +29,7 @@ static GLenum DrawModeToGLEnum(DrawMode input) {
 	return 0;
 }
 
-void Draw(uint32_t vertexCount, DrawMode mode) {
+void ExecuteDraw(uint32_t vertexCount, DrawMode mode) {
 	glDrawArrays(DrawModeToGLEnum(mode), 0, vertexCount);
 }
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "track.h"
-
+#include "transform.h"
 
 class TransformTrack {
 protected:
@@ -15,10 +15,10 @@ public:
 	uint32_t GetId();
 	VectorTrack& GetPositionTrack();
 	VectorTrack& GetScaleTrack();
-	VectorTrack& GetRotationTrack();
+	QartanionTrack& GetRotationTrack();
 	bool IsValid();
 
 	float GetStartTime();
 	float GetEndTime();
-
+	Transform GetValue(const Transform& ref, float time, bool looping);
 };

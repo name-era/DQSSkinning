@@ -1,14 +1,14 @@
 #pragma once
+#define PI 3.14159265359
 
 #include "appBase.h"
 #include "track.h"
-#include "shader.h"
-#include "attribute.h"
 #include "uniform.h"
 #include "draw.h"
 #include "pose.h"
 #include "animationClip.h"
 #include "debugDraw.h"
+
 #include <vector>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -23,6 +23,8 @@ protected:
 
 	uint32_t _currentClip;
 	Pose _currentPose;
+
+	float _time;
 
 private:
 	ScalarTrack MakeScalarTrack(Interpolation interp, uint32_t numFrames, ...);
@@ -40,7 +42,7 @@ public:
 	};
 
 	void Initialize();
-	void Update();
+	void Update(float deltaTime);
 	void Render(float aspectRatio);
 	void ShutDown();
 };

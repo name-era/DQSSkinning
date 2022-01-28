@@ -100,8 +100,18 @@ void Graph::Initialize() {
 
 }
 
-void Graph::Render(float aspectRatio) {
+void Graph::Update(float deltaTime) {
+	_time = _clips[_currentClip].Sample(_currentPose, _time + deltaTime);
+	_currentPoseDraw->SetPose(_currentPose);
+}
 
+void Graph::Render(float aspectRatio) {
+	glm::mat4 projection = glm::perspective(float(60.0 / 180.0 * PI), aspectRatio, 0.01f, 1000.0f);
+	glm::mat4 view = glm::lookAt(glm::vec3(0, 4, 7), glm::vec3(0, 4, 4), glm::vec3(0, 1, 0));
+	glm::mat4 mvp = projection * view;
+
+	_restPoseDraw->Draw(DebugDrawMode::Lines, glm::vec3(1, 0, 0), mvp);
+	_currentPoseDraw->Draw(DebugDrawMode::Lines, glm::vec3(0, 0, 1), mvp);
 }
 
 void Graph::ShutDown() {

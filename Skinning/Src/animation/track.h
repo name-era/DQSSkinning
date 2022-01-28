@@ -24,7 +24,7 @@ protected:
 	/**
 	* 時間をトラックの範囲に合わせる
 	*/
-	float AdjustTimeToFitTrack(float time, bool looping);
+	float AdjustTime(float time, bool looping);
 
 	/**
 	* 補間しないときの値を求める
@@ -69,11 +69,10 @@ public:
 	*/
 	float GetEndTime();
 
-
-
-
-
-
+	/**
+	* 値を求める
+	*/
+	T GetValue(float time, bool looping);
 
 
 
@@ -94,10 +93,6 @@ public:
 	*/
 	uint32_t GetSize();
 
-	/**
-	* 値を求める
-	*/
-	T GetValue(float time, bool looping);
 
 	/**
 	* フレームを追加する

@@ -9,6 +9,7 @@ protected:
 	std::string _name;
 	float _startTime;
 	float _endTime;
+	bool _isLoop;
 
 public:
 	void SetName(const std::string& inNewName);
@@ -16,5 +17,7 @@ public:
 	bool IsValid();
 	void RecalculateDuration();
 	std::string& GetName();
+
+	float AdjustTime(float inTime);
 	float Sample(Pose& outPose, float inTime);
 };

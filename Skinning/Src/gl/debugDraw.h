@@ -5,13 +5,17 @@
 #include "attribute.h"
 #include "shader.h"
 #include "pose.h"
+#include "uniform.h"
+#include "draw.h"
+
+#include <glm/glm.hpp>
+
+enum class DebugDrawMode
+{
+	Lines, Loop, Strip, Points
+};
 
 class DebugDraw {
-	enum class DrawMode
-	{
-		Lines, Loop, Strip, Points
-	};
-
 protected:
 	std::vector<glm::vec3> _points;
 	Attribute<glm::vec3>* _attributes;
@@ -29,5 +33,6 @@ public:
 
 
 	void Resize(uint32_t size);
-	void FromPose(Pose& pose);
+	void SetPose(Pose& pose);
+	void Draw(DebugDrawMode mode, const glm::vec3& color, const glm::mat4& mvp);
 };

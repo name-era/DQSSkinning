@@ -12,7 +12,7 @@ VectorTrack& TransformTrack::GetScaleTrack() {
 	return _scale;
 }
 
-VectorTrack& TransformTrack::GetRotationTrack() {
+QartanionTrack& TransformTrack::GetRotationTrack() {
 	return _rotation;
 }
 
@@ -72,5 +72,20 @@ float TransformTrack::GetEndTime() {
 		}
 	}
 
+	return result;
+}
+
+Transform TransformTrack::GetValue(const Transform& ref,
+	float time, bool looping) {
+	Transform result = ref; 
+	if (_position.GetSize() > 1) { 
+		result.position = _position.GetValue(time, looping);
+	}
+	if (_rotation.GetSize() > 1) { 
+		result.rotation = _rotation.GetValue(time, looping);
+	}
+	if (_scale.GetSize() > 1) { 
+		result.scale = _scale.GetValue(time, looping);
+	}
 	return result;
 }

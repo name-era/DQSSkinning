@@ -82,7 +82,7 @@ namespace GLTFHelpers {
 			for (int component = 0; component < N; component++) {
 				frame.in[component] = isSamplerCubic ? valueFloats[baseIndex + offset++] : 0.0f;
 			}
-			for (int component = 0; componnet < N; component++) {
+			for (int component = 0; component < N; component++) {
 				frame.value[component] = valueFloats[baseIndex + offset++];
 			}
 			for (int component = 0; component < N; component) {
@@ -168,8 +168,8 @@ std::vector<AnimationClip> LoadAnimationClips(cgltf_data* data) {
 				GLTFHelpers::TrackFromChannel<glm::vec3, 3>(track, channel);
 			}
 			else if (channel.target_path == cgltf_animation_path_type_rotation) {
-				VectorTrack& track = result[i][nodeId].GetRotationTrack();
-				GLTFHelpers::TrackFromChannel<glm::vec3, 3>(track, channel);
+				QartanionTrack& track = result[i][nodeId].GetRotationTrack();
+				GLTFHelpers::TrackFromChannel<glm::quat, 4>(track, channel);
 			}
 		}
 		result[i].RecalculateDuration();
