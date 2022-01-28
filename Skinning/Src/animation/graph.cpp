@@ -87,6 +87,7 @@ void Graph::Initialize() {
 	_currentClip = 0;
 	_currentPose = _restPose;
 
+	_currentPoseDraw = new DebugDraw();
 	_currentPoseDraw->SetPose(_currentPose);
 
 	//walkingのアニメーションを取り出す
@@ -106,8 +107,8 @@ void Graph::Update(float deltaTime) {
 }
 
 void Graph::Render(float aspectRatio) {
-	glm::mat4 projection = glm::perspective(float(60.0 / 180.0 * PI), aspectRatio, 0.01f, 1000.0f);
-	glm::mat4 view = glm::lookAt(glm::vec3(0, 4, 7), glm::vec3(0, 4, 4), glm::vec3(0, 1, 0));
+	glm::mat4 projection = glm::perspective(glm::radians(60.0f), aspectRatio, 0.01f, 1000.0f);
+	glm::mat4 view = glm::lookAt(glm::vec3(0, 4, 7), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 	glm::mat4 mvp = projection * view;
 
 	_restPoseDraw->Draw(DebugDrawMode::Lines, glm::vec3(1, 0, 0), mvp);

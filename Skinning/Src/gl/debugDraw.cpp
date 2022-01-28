@@ -22,10 +22,11 @@ void DebugDraw::Resize(uint32_t size) {
 }
 
 void DebugDraw::SetPose(Pose& pose) {
-	unsigned int requiredVerts = 0;
-	unsigned int numJoints = pose.GetSize();
+	uint32_t requiredVerts = 0;
+	uint32_t numJoints = pose.GetSize();
+	_points.clear();
 
-	for (unsigned int i = 0; i < numJoints; ++i) {
+	for (uint32_t i = 0; i < numJoints; i++) {
 		if (pose.GetParent(i) < 0) {
 			continue;
 		}
@@ -33,8 +34,7 @@ void DebugDraw::SetPose(Pose& pose) {
 		requiredVerts += 2;
 	}
 
-	_points.resize(requiredVerts);
-	for (unsigned int i = 0; i < numJoints; ++i) {
+	for (uint32_t i = 0; i < numJoints; i++) {
 		if (pose.GetParent(i) < 0) {
 			continue;
 		}

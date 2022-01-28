@@ -62,7 +62,7 @@ public:
 	/**
 	* e‚ğæ“¾‚·‚é
 	*/
-	uint32_t GetParent(uint32_t index);
+	int GetParent(uint32_t index);
 
 	bool operator==(const Pose& other);
 	bool operator!=(const Pose& other);

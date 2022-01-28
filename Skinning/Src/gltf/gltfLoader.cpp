@@ -6,8 +6,6 @@ namespace GLTFHelpers {
 		Transform result;
 
 		if (node.has_matrix) {
-			//glm::mat4 mat(node.matrix[0]);
-			//result = mat4ToTransform(mat);
 			//とりあえず考えない
 		}
 
@@ -46,7 +44,7 @@ namespace GLTFHelpers {
 	}
 
 	template<typename T, int N>
-	void TrackFromChannel(Track<T, N>& inOutTrack, const cgltf_animation_channel& inChannel) {
+	void GetTracks(Track<T, N>& inOutTrack, const cgltf_animation_channel& inChannel) {
 		cgltf_animation_sampler& sampler = *inChannel.sampler;
 
 		Interpolation interpolation = Interpolation::Constant;
@@ -60,33 +58,33 @@ namespace GLTFHelpers {
 		bool isSamplerCubic = (interpolation == Interpolation::Cubic);
 		inOutTrack.SetInterpolation(interpolation);
 
-		std::vector<float> timelineFloats;
-		GetScalarValues(timelineFloats, 1, *sampler.input);
+		std::vector<float> timePlots;
+		GetScalarValues(timePlots, 1, *sampler.input);
 
-		std::vector<float> valueFloats;
-		GetScalarValues(valueFloats, N, *sampler.output);
+		std::vector<float> Values;
+		GetScalarValues(Values, N, *sampler.output);
 
 		uint32_t numFrames = (uint32_t)sampler.input->count;
-		uint32_t numberOfValuesPerFrame = (uint32_t)(valueFloats.size() / timelineFloats.size());
+		uint32_t numOfValuesPerFrame = (uint32_t)(Values.size() / timePlots.size());
 		inOutTrack.Resize(numFrames);
 
 
 		for (uint32_t i = 0; i < numFrames; i++) {
 			//1フレームごとの値の数×フレーム数
-			int baseIndex = i * numberOfValuesPerFrame;
+			int baseIndex = i * numOfValuesPerFrame;
 			Frame<N>& frame = inOutTrack[i];
 			int offset = 0;
-			frame.time = timelineFloats[i];
+			frame.time = timePlots[i];
 
 			//キュービック補間であればinとoutに値を入れておく
 			for (int component = 0; component < N; component++) {
-				frame.in[component] = isSamplerCubic ? valueFloats[baseIndex + offset++] : 0.0f;
+				frame.in[component] = isSamplerCubic ? Values[baseIndex + offset++] : 0.0f;
 			}
 			for (int component = 0; component < N; component++) {
-				frame.value[component] = valueFloats[baseIndex + offset++];
+				frame.value[component] = Values[baseIndex + offset++];
 			}
-			for (int component = 0; component < N; component) {
-				frame.out[component] = isSamplerCubic ? valueFloats[baseIndex + offset++] : 0.0f;
+			for (int component = 0; component < N; component++) {
+				frame.out[component] = isSamplerCubic ? Values[baseIndex + offset++] : 0.0f;
 			}
 		}
 	}
@@ -143,36 +141,37 @@ Pose LoadRestPose(cgltf_data* data) {
 }
 
 std::vector<AnimationClip> LoadAnimationClips(cgltf_data* data) {
-	uint32_t numClips = (uint32_t)data->animations_count;
+	uint32_t animationNum = (uint32_t)data->animations_count;
 	uint32_t numNodes = (uint32_t)data->nodes_count;
 
 	std::vector<AnimationClip> result;
-	result.resize(numClips);
+	result.resize(animationNum);
 
-	for (uint32_t i = 0; i < numClips; i++) {
+	for (uint32_t i = 0; i < animationNum; i++) {
 		//アニメーションの名前を保存
 		result[i].SetName(data->animations[i].name);
-		uint32_t numChannels = (uint32_t)data->animations[i].channels_count;
+		uint32_t channelNum = (uint32_t)data->animations[i].channels_count;
 
 		//channel：アニメーションさせるnodeとその詳細を指定する
-		for (uint32_t j = 0; j < numChannels; j++) {
+		for (uint32_t j = 0; j < channelNum; j++) {
 			cgltf_animation_channel& channel = data->animations[i].channels[j];
 			cgltf_node* target = channel.target_node;
 			int nodeId = GLTFHelpers::GetNodeIndex(target, data->nodes, numNodes);
 			if (channel.target_path == cgltf_animation_path_type_translation) {
 				VectorTrack& track = result[i][nodeId].GetPositionTrack();
-				GLTFHelpers::TrackFromChannel<glm::vec3, 3>(track, channel);
+				GLTFHelpers::GetTracks<glm::vec3, 3>(track, channel);
 			}
 			else if (channel.target_path == cgltf_animation_path_type_scale) {
 				VectorTrack& track = result[i][nodeId].GetScaleTrack();
-				GLTFHelpers::TrackFromChannel<glm::vec3, 3>(track, channel);
+				GLTFHelpers::GetTracks<glm::vec3, 3>(track, channel);
 			}
 			else if (channel.target_path == cgltf_animation_path_type_rotation) {
 				QartanionTrack& track = result[i][nodeId].GetRotationTrack();
-				GLTFHelpers::TrackFromChannel<glm::quat, 4>(track, channel);
+				GLTFHelpers::GetTracks<glm::quat, 4>(track, channel);
 			}
 		}
 		result[i].RecalculateDuration();
 	}
+
 	return result;
 }

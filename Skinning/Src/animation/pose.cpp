@@ -52,9 +52,8 @@ Transform Pose::GetLocalTransform(uint32_t index) {
 Transform Pose::GetGlobalTransform(uint32_t index) {
 	Transform result = _joints[index];
 	//e‚Ü‚Å‘k‚Á‚Ä‹‚ß‚é
-	for (uint32_t parent = _parents[index]; parent >= 0; parent = _parents[parent]) {
+	for (int parent = _parents[index]; parent >= 0; parent = _parents[parent]) {
 		result = Combine(_joints[parent], result);
-
 	}
 	return result;
 }
@@ -78,7 +77,7 @@ void Pose::SetParent(uint32_t index, int parent) {
 	_parents[index] = parent;
 }
 
-uint32_t Pose::GetParent(uint32_t index) {
+int Pose::GetParent(uint32_t index) {
 	return _parents[index];
 }
 
