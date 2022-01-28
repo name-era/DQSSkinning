@@ -84,4 +84,5 @@ Pose LoadRestPose(cgltf_data* data) {
 		uint32_t parent = GLTFHelpers::GetNodeIndex(node->parent, data->nodes, boneCount);
 		result.SetParent(i, parent);
 	}
+	return result;
 }
