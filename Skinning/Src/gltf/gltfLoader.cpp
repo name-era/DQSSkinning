@@ -66,8 +66,8 @@ namespace GLTFHelpers {
 		std::vector<float> valueFloats;
 		GetScalarValues(valueFloats, N, *sampler.output);
 
-		uint32_t numFrames = sampler.input->count;
-		uint32_t numberOfValuesPerFrame = valueFloats.size() / timelineFloats.size();
+		uint32_t numFrames = (uint32_t)sampler.input->count;
+		uint32_t numberOfValuesPerFrame = (uint32_t)(valueFloats.size() / timelineFloats.size());
 		inOutTrack.Resize(numFrames);
 
 
@@ -128,7 +128,7 @@ void FreeGLTFFile(cgltf_data* data) {
 }
 
 Pose LoadRestPose(cgltf_data* data) {
-	uint32_t boneCount = data->nodes_count;
+	uint32_t boneCount = (uint32_t)data->nodes_count;
 	Pose result(boneCount);
 
 	for (uint32_t i = 0; i < boneCount; i++) {
@@ -143,8 +143,8 @@ Pose LoadRestPose(cgltf_data* data) {
 }
 
 std::vector<AnimationClip> LoadAnimationClips(cgltf_data* data) {
-	uint32_t numClips = data->animations_count;
-	uint32_t numNodes = data->nodes_count;
+	uint32_t numClips = (uint32_t)data->animations_count;
+	uint32_t numNodes = (uint32_t)data->nodes_count;
 
 	std::vector<AnimationClip> result;
 	result.resize(numClips);
@@ -152,7 +152,7 @@ std::vector<AnimationClip> LoadAnimationClips(cgltf_data* data) {
 	for (uint32_t i = 0; i < numClips; i++) {
 		//アニメーションの名前を保存
 		result[i].SetName(data->animations[i].name);
-		uint32_t numChannels = data->animations[i].channels_count;
+		uint32_t numChannels = (uint32_t)data->animations[i].channels_count;
 
 		//channel：アニメーションさせるnodeとその詳細を指定する
 		for (uint32_t j = 0; j < numChannels; j++) {

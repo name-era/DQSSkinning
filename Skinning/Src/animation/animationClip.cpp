@@ -5,12 +5,15 @@ void AnimationClip::SetName(const std::string& inNewName) {
 }
 
 TransformTrack& AnimationClip::operator[](uint32_t joint) {
-	uint32_t size = _tracks.size();
+	uint32_t size = (uint32_t)_tracks.size();
 	for (uint32_t i = 0; i < size; i++) {
 		if (_tracks[i].GetId() == joint) {
 			return _tracks[i];
 		}
 	}
+	_tracks.push_back(TransformTrack());
+	_tracks[_tracks.size() - 1].SetId(joint);
+	return _tracks[_tracks.size() - 1];
 }
 
 
@@ -73,7 +76,7 @@ float AnimationClip::Sample(Pose& outPose, float time) {
 	}
 	time = AdjustTime(time);
 
-	unsigned int size = _tracks.size();
+	uint32_t size = (uint32_t)_tracks.size();
 	for (unsigned int i = 0; i < size; ++i) {
 		unsigned int joint = _tracks[i].GetId();
 		Transform local = outPose.GetLocalTransform(joint);

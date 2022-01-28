@@ -12,6 +12,7 @@ protected:
 
 public:
 	TransformTrack();
+	void SetId(uint32_t id);
 	uint32_t GetId();
 	VectorTrack& GetPositionTrack();
 	VectorTrack& GetScaleTrack();

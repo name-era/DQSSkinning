@@ -1,5 +1,13 @@
 #include "transformTrack.h"
 
+TransformTrack::TransformTrack() {
+	_id = 0;
+}
+
+void TransformTrack::SetId(uint32_t id) {
+	_id = id;
+}
+
 uint32_t TransformTrack::GetId() {
 	return _id;
 }

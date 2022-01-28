@@ -38,7 +38,7 @@ Pose& Pose::operator=(const Pose& p) {
 }
 
 uint32_t Pose::GetSize() {
-	return _joints.size();
+	return (uint32_t)_joints.size();
 }
 
 void Pose::SetLocalTransform(uint32_t index, const Transform& transform) {
@@ -91,7 +91,7 @@ bool Pose::operator==(const Pose& other) {
 		return false;
 	}
 
-	uint32_t size = _joints.size();
+	uint32_t size = (uint32_t)_joints.size();
 	for (uint32_t i = 0; i < size; i++) {
 
 		Transform thisLocal = _joints[i];
@@ -105,8 +105,8 @@ bool Pose::operator==(const Pose& other) {
 		if (thisLocal != otherLocal) {
 			return false;
 		}
-		return true;
 	}
+	return true;
 }
 
 bool Pose::operator!=(const Pose& other) {

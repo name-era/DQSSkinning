@@ -90,7 +90,7 @@ void Graph::Initialize() {
 	_currentPoseDraw->SetPose(_currentPose);
 
 	//walkingのアニメーションを取り出す
-	uint32_t numUIClips = _clips.size();
+	uint32_t numUIClips = (uint32_t)_clips.size();
 	for (unsigned int i = 0; i < numUIClips; ++i) {
 		if (_clips[i].GetName() == "Walking") {
 			_currentClip = i;
