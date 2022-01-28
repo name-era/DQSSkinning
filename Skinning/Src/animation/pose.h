@@ -57,7 +57,7 @@ public:
 	/**
 	* 親をセットする
 	*/
-	void SetParent(uint32_t index, uint32_t parent);
+	void SetParent(uint32_t index, int parent);
 
 	/**
 	* 親を取得する

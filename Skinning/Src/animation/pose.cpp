@@ -74,7 +74,7 @@ void Pose::GetMatrixPalette(std::vector<glm::mat4>& out) {
 	}
 }
 
-void Pose::SetParent(uint32_t index, uint32_t parent) {
+void Pose::SetParent(uint32_t index, int parent) {
 	_parents[index] = parent;
 }
 

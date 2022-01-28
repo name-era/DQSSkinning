@@ -19,6 +19,24 @@ namespace TrackHelpers {
 }
 
 template<typename T, uint32_t N>
+float Track<T, N>::GetStartTime() {
+	return mFrames[0].mTime;
+}
+
+template<typename T, uint32_t N>
+float Track<T, N>::GetEndTime() {
+	return mFrames[mFrames.size() - 1].mTime;
+}
+
+
+
+
+
+
+
+
+
+template<typename T, uint32_t N>
 void Track<T, N>::SetInterpolation(Interpolation interpolation) {
 	_interpolation = interpolation;
 }

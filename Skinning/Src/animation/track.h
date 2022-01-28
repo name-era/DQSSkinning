@@ -60,6 +60,26 @@ public:
 	~Track() {};
 
 	/**
+	* 開始時間を取得
+	*/
+	float GetStartTime();
+
+	/**
+	* 終了時間を取得
+	*/
+	float GetEndTime();
+
+
+
+
+
+
+
+
+
+
+
+	/**
 	* 補間の種類をセットする
 	*/
 	void SetInterpolation(Interpolation interpolation);
