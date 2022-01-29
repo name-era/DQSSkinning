@@ -112,7 +112,7 @@ T Track<T, N>::GetCubicValue(float time, bool looping) {
 }
 
 template<typename T, uint32_t N>
-T Track<T, N>::GetValue(float time, bool looping) {
+T Track<T, N>::GetInterpolatedValue(float time, bool looping) {
 	if (_interpolation == Interpolation::Constant) {
 		return GetConstantValue(time, looping);
 	}

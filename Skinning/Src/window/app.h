@@ -1,42 +1,39 @@
 #pragma once
-#define DEG2RAD 0.0174533f
+#define PI 3.14159265359
 
 #include "appBase.h"
-#include "shader.h"
-#include "attribute.h"
-#include "IndexBuffer.h"
-#include "texture.h"
+#include "track.h"
+#include "uniform.h"
+#include "draw.h"
+#include "pose.h"
+#include "animationClip.h"
+#include "debugDraw.h"
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/quaternion.hpp>
-#include <glm/gtx/quaternion.hpp>
+#include <vector>
+#include <glm/gtc/type_ptr.hpp>
 
-class App : public Application {
+
+class Graph : public Application {
 protected:
+	Pose _restPose;
+	std::vector<AnimationClip> _clips;
 
+	DebugDraw* _restPoseDraw;
+	DebugDraw* _currentPoseDraw;
+
+	uint32_t _currentClip;
+	Pose _currentPose;
+
+	float _time;
 
 public:
-	
-	App();
-	
-	/**
-	* 初期化
-	*/
+
+	enum class GraphDrawMode {
+		Lines, Loop, Strip, Points
+	};
+
 	void Initialize();
-
-	/**
-	* パラメータの更新
-	*/
 	void Update(float deltaTime);
-
-	/**
-	* 描画
-	*/
 	void Render(float aspectRatio);
-
-	/**
-	* 終了時のインスタンス削除
-	*/
-	void Shutdown();
+	void ShutDown();
 };

@@ -24,9 +24,8 @@ void AnimationClip::RecalculateDuration() {
 	_endTime = 0.0f;
 	bool startSet = false;
 	bool endSet = false;
-	unsigned int tracksSize = (unsigned int)_tracks.size();
 
-	for (unsigned int i = 0; i < tracksSize; ++i) {
+	for (uint32_t i = 0; i < _tracks.size(); i++) {
 		if (_tracks[i].IsValid()) {
 			float trackStartTime = _tracks[i].GetStartTime();
 			float trackEndTime = _tracks[i].GetEndTime();
@@ -71,15 +70,15 @@ float AnimationClip::AdjustTime(float inTime) {
 	return inTime;
 }
 
-float AnimationClip::Sample(Pose& outPose, float time) {
+float AnimationClip::Animate(Pose& outPose, float time) {
 	
 	if ((_endTime-_startTime) == 0.0f) {
 		return 0.0f;
 	}
 	time = AdjustTime(time);
 
-	for (unsigned int i = 0; i < _tracks.size(); i++) {
-		unsigned int joint = _tracks[i].GetId();
+	for (uint32_t i = 0; i < _tracks.size(); i++) {
+		uint32_t joint = _tracks[i].GetId();
 		Transform local = outPose.GetLocalTransform(joint);
 		Transform animated = _tracks[i].GetValue(local, time, _isLoop);
 		outPose.SetLocalTransform(joint, animated);

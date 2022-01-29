@@ -87,13 +87,13 @@ Transform TransformTrack::GetValue(const Transform& ref,
 	float time, bool looping) {
 	Transform result = ref; 
 	if (_position.GetSize() > 1) { 
-		result.position = _position.GetValue(time, looping);
+		result.position = _position.GetInterpolatedValue(time, looping);
 	}
 	if (_rotation.GetSize() > 1) { 
-		result.rotation = _rotation.GetValue(time, looping);
+		result.rotation = _rotation.GetInterpolatedValue(time, looping);
 	}
 	if (_scale.GetSize() > 1) { 
-		result.scale = _scale.GetValue(time, looping);
+		result.scale = _scale.GetInterpolatedValue(time, looping);
 	}
 	return result;
 }

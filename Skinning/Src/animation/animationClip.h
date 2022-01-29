@@ -1,5 +1,5 @@
 #pragma once
-#include<iostream>
+#include <iostream>
 #include "transformTrack.h"
 #include "pose.h"
 
@@ -18,5 +18,5 @@ public:
 	std::string& GetName();
 
 	float AdjustTime(float inTime);
-	float Sample(Pose& outPose, float inTime);
+	float Animate(Pose& outPose, float inTime);
 };

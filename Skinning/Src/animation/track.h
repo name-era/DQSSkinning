@@ -72,7 +72,7 @@ public:
 	/**
 	* ’l‚ğ‹‚ß‚é
 	*/
-	T GetValue(float time, bool looping);
+	T GetInterpolatedValue(float time, bool looping);
 
 
 
