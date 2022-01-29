@@ -68,7 +68,6 @@ namespace GLTFHelpers {
 		uint32_t numOfValuesPerFrame = (uint32_t)(Values.size() / timePlots.size());
 		inOutTrack.Resize(numFrames);
 
-
 		for (uint32_t i = 0; i < numFrames; i++) {
 			//1フレームごとの値の数×フレーム数
 			int baseIndex = i * numOfValuesPerFrame;

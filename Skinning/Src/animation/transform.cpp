@@ -20,7 +20,7 @@ Transform Mat4ToTransform(const glm::mat4& m) {
 
 	Transform out;
 	
-	out.position = glm::vec3(m[0][3], m[1][3], m[2][3]);
+	//out.position = glm::vec3(m[0][3], m[1][3], m[2][3]);
 	//glm::mat4 rotMatrix=glm::lookAt(vec3()
 	//out.rotation = glm::quat_cast(m);
 

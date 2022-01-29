@@ -56,7 +56,7 @@ float AnimationClip::AdjustTime(float inTime) {
 		}
 		inTime = fmodf(inTime - _startTime, _endTime - _startTime);
 		if (inTime < 0.0f) {
-			inTime += _endTime - _startTime;
+			inTime += (_endTime - _startTime);
 		}
 		inTime = inTime + _startTime;
 	}

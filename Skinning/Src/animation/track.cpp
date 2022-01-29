@@ -40,7 +40,7 @@ T Track<T, N>::GetConstantValue(float time, bool looping) {
 template<typename T, uint32_t N>
 T Track<T, N>::GetLinearValue(float time, bool looping) {
 	uint32_t thisFrame = GetFrameIndex(time, looping);
-	if (thisFrame < 0 || thisFrame >= _frames.size()) {
+	if (thisFrame < 0 || thisFrame >= _frames.size() - 1 ) {
 		return T();
 	}
 	uint32_t nextFrame = thisFrame + 1;
@@ -146,7 +146,7 @@ template<> glm::vec3 Track<glm::vec3, 3>::Cast(float* value) {
 }
 
 template<> glm::quat Track<glm::quat, 4>::Cast(float* value) {
-	glm::quat r = glm::quat(value[0], value[1], value[2], value[3]);
+	glm::quat r = glm::quat(value[3], value[0], value[1], value[2]);
 	return glm::normalize(r);
 }
 
@@ -180,7 +180,7 @@ uint32_t Track<T, N>::GetFrameIndex(float time, bool looping) {
 
 	for (int i = (int)frameSize - 1; i >= 0; i--) {
 		//コマ打ちされている時間以降であればそのコマを返す
-		if (time > _frames[i].time) {
+		if (time >= _frames[i].time) {
 			return i;
 		}
 	}
