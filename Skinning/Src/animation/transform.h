@@ -1,6 +1,9 @@
 #pragma once
+#include "track.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
+#include <glm/gtx/matrix_decompose.hpp>
 
 struct Transform {
 	glm::vec3 position;
@@ -8,7 +11,7 @@ struct Transform {
 	glm::vec3 scale;
 	Transform():
 		position(glm::vec3(0,0,0)),
-		rotation(glm::quat(0,0,0,1)),
+		rotation(glm::quat(1,0,0,0)),
 		scale(glm::vec3(1,1,1)){}
 	Transform(const glm::vec3& p, const glm::quat& r, const glm::vec3& s):
 		position(p),
@@ -16,7 +19,7 @@ struct Transform {
 		scale(s){}
 };
 
-Transform Combine(const Transform& a, const Transform& b);
+Transform Combine(const Transform& parent, const Transform& child);
 Transform Mat4ToTransform(const glm::mat4& m);
 glm::mat4 TransformToMat4(const Transform& t);
 bool operator==(const Transform& a, const Transform& b);

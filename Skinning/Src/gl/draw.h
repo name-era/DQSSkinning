@@ -14,7 +14,7 @@ enum class DrawMode {
 /**
 * 頂点を描画する
 */
-void Draw(uint32_t vertexCount, DrawMode mode);
+void ExecuteDraw(uint32_t vertexCount, DrawMode mode);
 
 /**
 * インデックスが指定する頂点を描画する

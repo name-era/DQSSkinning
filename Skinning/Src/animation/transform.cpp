@@ -1,15 +1,17 @@
 #include "transform.h"
 
-Transform Combine(const Transform& a, const Transform& b) {
+Transform Combine(const Transform& parent, const Transform& child) {
+	
 	Transform out;
-	//scale, rotation, translationÇÃèáÇ≈ïœä∑ÇçsÇ§
-	out.scale = a.scale * b.scale;
-	out.rotation = b.rotation * a.rotation;
 
+	out.scale = parent.scale * child.scale;
+	out.rotation = parent.rotation * child.rotation;
+
+	//scale, rotation, translationÇÃèáÇ≈ïœä∑ÇçsÇ§
 	//rotation * scale
-	out.position = a.rotation * (a.scale * b.position);
+	out.position = parent.rotation * (parent.scale * child.position);
 	//translation
-	out.position = a.position + out.position;
+	out.position = parent.position + out.position;
 
 	return out;
 }
@@ -17,7 +19,8 @@ Transform Combine(const Transform& a, const Transform& b) {
 Transform Mat4ToTransform(const glm::mat4& m) {
 
 	Transform out;
-	out.position = glm::vec3(m[12], m[13], m[14]);
+	
+	//out.position = glm::vec3(m[0][3], m[1][3], m[2][3]);
 	//glm::mat4 rotMatrix=glm::lookAt(vec3()
 	//out.rotation = glm::quat_cast(m);
 
@@ -44,9 +47,9 @@ glm::mat4 TransformToMat4(const Transform& t) {
 	glm::vec3 y = t.rotation * glm::vec3(0, 1, 0);
 	glm::vec3 z = t.rotation * glm::vec3(0, 0, 1);
 
-	x *= t.scale.x;
-	y *= t.scale.y;
-	z *= t.scale.z;
+	x *= glm::vec3(t.scale.x);
+	y *= glm::vec3(t.scale.y);
+	z *= glm::vec3(t.scale.z);
 
 	glm::vec3 p = t.position;
 

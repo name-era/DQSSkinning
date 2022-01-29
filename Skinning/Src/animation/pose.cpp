@@ -38,7 +38,7 @@ Pose& Pose::operator=(const Pose& p) {
 }
 
 uint32_t Pose::GetSize() {
-	return _joints.size();
+	return (uint32_t)_joints.size();
 }
 
 void Pose::SetLocalTransform(uint32_t index, const Transform& transform) {
@@ -52,9 +52,8 @@ Transform Pose::GetLocalTransform(uint32_t index) {
 Transform Pose::GetGlobalTransform(uint32_t index) {
 	Transform result = _joints[index];
 	//e‚Ü‚Å‘k‚Á‚Ä‹‚ß‚é
-	for (uint32_t parent = _parents[index]; parent >= 0; parent = _parents[parent]) {
+	for (int parent = _parents[index]; parent >= 0; parent = _parents[parent]) {
 		result = Combine(_joints[parent], result);
-
 	}
 	return result;
 }
@@ -74,11 +73,11 @@ void Pose::GetMatrixPalette(std::vector<glm::mat4>& out) {
 	}
 }
 
-void Pose::SetParent(uint32_t index, uint32_t parent) {
+void Pose::SetParent(uint32_t index, int parent) {
 	_parents[index] = parent;
 }
 
-uint32_t Pose::GetParent(uint32_t index) {
+int Pose::GetParent(uint32_t index) {
 	return _parents[index];
 }
 
@@ -91,7 +90,7 @@ bool Pose::operator==(const Pose& other) {
 		return false;
 	}
 
-	uint32_t size = _joints.size();
+	uint32_t size = (uint32_t)_joints.size();
 	for (uint32_t i = 0; i < size; i++) {
 
 		Transform thisLocal = _joints[i];
@@ -105,8 +104,8 @@ bool Pose::operator==(const Pose& other) {
 		if (thisLocal != otherLocal) {
 			return false;
 		}
-		return true;
 	}
+	return true;
 }
 
 bool Pose::operator!=(const Pose& other) {

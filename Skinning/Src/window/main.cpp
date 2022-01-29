@@ -8,7 +8,7 @@
 #undef APIENTRY
 #include <Windows.h>
 #include <iostream>
-#include "graph.h"
+#include "app.h"
 #include "gui.h"
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR, int);

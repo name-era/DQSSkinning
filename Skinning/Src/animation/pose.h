@@ -57,12 +57,12 @@ public:
 	/**
 	* 親をセットする
 	*/
-	void SetParent(uint32_t index, uint32_t parent);
+	void SetParent(uint32_t index, int parent);
 
 	/**
 	* 親を取得する
 	*/
-	uint32_t GetParent(uint32_t index);
+	int GetParent(uint32_t index);
 
 	bool operator==(const Pose& other);
 	bool operator!=(const Pose& other);

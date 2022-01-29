@@ -24,7 +24,7 @@ protected:
 	/**
 	* 時間をトラックの範囲に合わせる
 	*/
-	float AdjustTimeToFitTrack(float time, bool looping);
+	float AdjustTime(float time, bool looping);
 
 	/**
 	* 補間しないときの値を求める
@@ -60,6 +60,25 @@ public:
 	~Track() {};
 
 	/**
+	* 開始時間を取得
+	*/
+	float GetStartTime();
+
+	/**
+	* 終了時間を取得
+	*/
+	float GetEndTime();
+
+	/**
+	* 値を求める
+	*/
+	T GetInterpolatedValue(float time, bool looping);
+
+
+
+
+
+	/**
 	* 補間の種類をセットする
 	*/
 	void SetInterpolation(Interpolation interpolation);
@@ -74,10 +93,6 @@ public:
 	*/
 	uint32_t GetSize();
 
-	/**
-	* 値を求める
-	*/
-	T GetValue(float time, bool looping);
 
 	/**
 	* フレームを追加する
