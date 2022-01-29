@@ -35,4 +35,5 @@ public:
 	void Resize(uint32_t size);
 	void SetPose(Pose& pose);
 	void Draw(DebugDrawMode mode, const glm::vec3& color, const glm::mat4& mvp);
+
 };

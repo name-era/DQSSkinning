@@ -14,7 +14,7 @@ namespace GLTFHelpers {
 		}
 
 		if (node.has_rotation) {
-			result.rotation = glm::quat(node.rotation[0], node.rotation[1], node.rotation[2], node.rotation[3]);
+			result.rotation = glm::quat(node.rotation[3], node.rotation[0], node.rotation[1], node.rotation[2]);
 		}
 
 		if (node.has_scale) {
@@ -24,7 +24,7 @@ namespace GLTFHelpers {
 		return result;
 	}
 
-	uint32_t GetNodeIndex(cgltf_node* target, cgltf_node* allNodes, uint32_t numNodes) {
+	int GetNodeIndex(cgltf_node* target, cgltf_node* allNodes, uint32_t numNodes) {
 		if (target == 0) {
 			return -1;
 		}
@@ -44,7 +44,7 @@ namespace GLTFHelpers {
 	}
 
 	template<typename T, int N>
-	void GetTracks(Track<T, N>& inOutTrack, const cgltf_animation_channel& inChannel) {
+	void SetValues(Track<T, N>& inOutTrack, const cgltf_animation_channel& inChannel) {
 		cgltf_animation_sampler& sampler = *inChannel.sampler;
 
 		Interpolation interpolation = Interpolation::Constant;
@@ -157,17 +157,18 @@ std::vector<AnimationClip> LoadAnimationClips(cgltf_data* data) {
 			cgltf_animation_channel& channel = data->animations[i].channels[j];
 			cgltf_node* target = channel.target_node;
 			int nodeId = GLTFHelpers::GetNodeIndex(target, data->nodes, numNodes);
+
 			if (channel.target_path == cgltf_animation_path_type_translation) {
 				VectorTrack& track = result[i][nodeId].GetPositionTrack();
-				GLTFHelpers::GetTracks<glm::vec3, 3>(track, channel);
+				GLTFHelpers::SetValues<glm::vec3, 3>(track, channel);
 			}
 			else if (channel.target_path == cgltf_animation_path_type_scale) {
 				VectorTrack& track = result[i][nodeId].GetScaleTrack();
-				GLTFHelpers::GetTracks<glm::vec3, 3>(track, channel);
+				GLTFHelpers::SetValues<glm::vec3, 3>(track, channel);
 			}
 			else if (channel.target_path == cgltf_animation_path_type_rotation) {
 				QartanionTrack& track = result[i][nodeId].GetRotationTrack();
-				GLTFHelpers::GetTracks<glm::quat, 4>(track, channel);
+				GLTFHelpers::SetValues<glm::quat, 4>(track, channel);
 			}
 		}
 		result[i].RecalculateDuration();

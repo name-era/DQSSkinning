@@ -1,15 +1,17 @@
 #include "transform.h"
 
-Transform Combine(const Transform& a, const Transform& b) {
+Transform Combine(const Transform& parent, const Transform& child) {
+	
 	Transform out;
-	//scale, rotation, translation‚Ì‡‚Å•ÏŠ·‚ğs‚¤
-	out.scale = a.scale * b.scale;
-	out.rotation = b.rotation * a.rotation;
 
+	out.scale = parent.scale * child.scale;
+	out.rotation = parent.rotation * child.rotation;
+
+	//scale, rotation, translation‚Ì‡‚Å•ÏŠ·‚ğs‚¤
 	//rotation * scale
-	out.position = a.rotation * (a.scale * b.position);
+	out.position = parent.rotation * (parent.scale * child.position);
 	//translation
-	out.position = a.position + out.position;
+	out.position = parent.position + out.position;
 
 	return out;
 }

@@ -14,7 +14,6 @@ protected:
 public:
 	void SetName(const std::string& inNewName);
 	TransformTrack& operator[](uint32_t index);
-	bool IsValid();
 	void RecalculateDuration();
 	std::string& GetName();
 
